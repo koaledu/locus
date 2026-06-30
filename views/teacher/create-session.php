@@ -73,17 +73,18 @@ document.getElementById('createSessionForm').addEventListener('submit', async (e
 
         if (res.ok) {
             currentSessionId = data.session.id;
+            const qrUrl = window.location.origin + '/api/attendance/scan?token=' + data.session.token + '&session=' + data.session.id;
             document.getElementById('qrToken').textContent = data.session.token;
             document.getElementById('qrExpires').textContent = new Date(data.session.expires_at.replace(' ', 'T') + '-05:00').toLocaleString('es-CO');
-            document.getElementById('qrLink').href = data.session.qr_data;
-            document.getElementById('qrLink').textContent = data.session.qr_data;
+            document.getElementById('qrLink').href = qrUrl;
+            document.getElementById('qrLink').textContent = qrUrl;
             document.getElementById('qrResult').style.display = 'block';
             document.getElementById('createSessionForm').style.display = 'none';
 
             const qrContainer = document.getElementById('qrContainer');
             qrContainer.innerHTML = '';
             new QRCode(qrContainer, {
-                text: data.session.qr_data,
+                text: qrUrl,
                 width: 250,
                 height: 250,
                 colorDark: '#1e293b',
