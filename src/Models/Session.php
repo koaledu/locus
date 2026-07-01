@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Database;
 use App\Helpers\Model;
 
 class Session extends Model

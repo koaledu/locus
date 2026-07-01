@@ -42,11 +42,18 @@
             <p><strong>Enlace:</strong> <a id="qrLink" href="" target="_blank"></a></p>
         </div>
         <button id="closeSessionBtn" class="btn btn-danger">Cerrar QR</button>
+        <button id="backToFormBtn" class="btn btn-secondary" style="margin-top:8px">Volver a la lista</button>
     </div>
 </div>
 
 <script>
 let currentSessionId = null;
+
+document.getElementById('backToFormBtn').addEventListener('click', () => {
+    document.getElementById('qrResult').style.display = 'none';
+    document.getElementById('createSessionForm').style.display = 'block';
+    document.getElementById('closeSessionBtn').style.display = 'inline-block';
+});
 
 document.getElementById('createSessionForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -114,12 +121,22 @@ document.getElementById('closeSessionBtn').addEventListener('click', async () =>
             }
         });
 
+        const text = await res.text();
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (_) {
+            alert('Respuesta inesperada (status ' + res.status + '):\n' + text.substring(0, 300));
+            return;
+        }
         if (res.ok) {
-            alert('Sesión cerrada');
+            alert(data.message || 'Sesión cerrada');
             window.location.href = '/teacher/dashboard';
+        } else {
+            alert('Error ' + res.status + ': ' + (data.error || 'desconocido'));
         }
     } catch (e) {
-        alert('Error al cerrar sesión');
+        alert('Error de conexión: ' + e.message);
     }
 });
 </script>

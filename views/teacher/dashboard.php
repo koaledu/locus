@@ -18,7 +18,7 @@
     <div class="section" id="sessionsSection">
         <h2>QRs Recientes</h2>
         <div id="sessionsList" class="sessions-list">
-            <p class="loading">Cargando sesiones...</p>
+            <p class="loading">Cargando QRs...</p>
         </div>
     </div>
 
@@ -87,13 +87,23 @@ document.addEventListener('DOMContentLoaded', async () => {
                 method: 'POST',
                 headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
             });
+            const text = await res.text();
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch (_) {
+                alert('Respuesta inesperada (status ' + res.status + '):\n' + text.substring(0, 300));
+                return;
+            }
             if (res.ok) {
                 qrResult.style.display = 'none';
                 sessionsSection.style.display = 'block';
                 loadSessions();
+            } else {
+                alert('Error ' + res.status + ': ' + (data.error || 'desconocido'));
             }
         } catch (e) {
-            alert('Error al cerrar sesión');
+            alert('Error de conexión: ' + e.message);
         }
     });
 

@@ -3,7 +3,7 @@
     <p class="subtitle">Selecciona una sesión para ver el detalle</p>
 
     <div id="sessionsReportList" class="sessions-list">
-        <p class="loading">Cargando sesiones...</p>
+        <p class="loading">Cargando QRs...</p>
     </div>
 
     <div id="sessionDetail" style="display:none" class="session-detail">

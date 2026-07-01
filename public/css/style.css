@@ -18,6 +18,10 @@
     --radius: 8px;
 }
 
+a {
+    text-decoration: none;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: var(--bg);
