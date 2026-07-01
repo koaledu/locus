@@ -30,7 +30,7 @@
             <p><strong>Expira:</strong> <span id="qrExpires" class="tabular-nums"></span></p>
             <p><strong>Enlace:</strong> <a id="qrLink" href="" target="_blank"></a></p>
         </div>
-        <button id="closeSessionBtn" class="btn btn-danger">Cerrar Sesión</button>
+        <button id="closeSessionBtn" class="btn btn-danger">Cerrar QR</button>
         <button id="backToListBtn" class="btn btn-secondary" style="margin-top:8px">Volver a la lista</button>
     </div>
 </div>
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById('closeSessionBtn').addEventListener('click', async () => {
         if (!currentSessionId) return;
-        if (!confirm('¿Cerrar esta sesión? Los estudiantes ya no podrán marcar asistencia.')) return;
+        if (!confirm('¿Cerrar este código QR? Los estudiantes ya no podrán marcar asistencia.')) return;
         try {
             const res = await fetch('/api/sessions/' + currentSessionId + '/close', {
                 method: 'POST',
