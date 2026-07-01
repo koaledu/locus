@@ -240,6 +240,10 @@ p {
     border-left: 4px solid var(--success);
 }
 
+.session-item.inactive {
+    border-left: 4px solid var(--danger);
+}
+
 .session-item.clickable {
     cursor: pointer;
 }
@@ -275,6 +279,11 @@ p {
 .status-active {
     background: #dcfce7;
     color: #166534;
+}
+
+.status-inactive {
+    background: #fef2f2;
+    color: #991b1b;
 }
 
 .status-closed {

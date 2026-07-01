@@ -65,7 +65,12 @@ class Session extends Model
 
     public static function close(int $id, int $teacherId): int
     {
-        return Database::update(static::$table, ['is_active' => 0], 'id = ? AND teacher_id = ?', [$id, $teacherId]);
+        return Database::update(
+            static::$table,
+            ['is_active' => 0, 'expires_at' => date('Y-m-d H:i:s')],
+            'id = ? AND teacher_id = ?',
+            [$id, $teacherId]
+        );
     }
 
     public static function teacherReportSessions(int $teacherId): array

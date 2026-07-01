@@ -38,6 +38,12 @@
 <script>
 let currentSessionId = null;
 
+function getSessionStatus(s) {
+    const expiresAt = new Date(s.expires_at.replace(' ', 'T') + '-05:00');
+    const now = new Date();
+    return !s.is_active || expiresAt <= now ? 'inactive' : 'active';
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     const sessionsSection = document.getElementById('sessionsSection');
     const sessionsList = document.getElementById('sessionsList');
@@ -61,6 +67,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             colorLight: '#ffffff',
             correctLevel: QRCode.CorrectLevel.H
         });
+        const status = getSessionStatus(session);
+        const canClose = status === 'active';
+        document.getElementById('closeSessionBtn').style.display = canClose ? 'inline-block' : 'none';
         sessionsSection.style.display = 'none';
         qrResult.style.display = 'block';
     }
@@ -79,53 +88,63 @@ document.addEventListener('DOMContentLoaded', async () => {
                 headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
             });
             if (res.ok) {
-                alert('Sesión cerrada');
-                location.reload();
+                qrResult.style.display = 'none';
+                sessionsSection.style.display = 'block';
+                loadSessions();
             }
         } catch (e) {
             alert('Error al cerrar sesión');
         }
     });
 
-    try {
-        const res = await fetch('/api/sessions', {
+    function loadSessions() {
+        fetch('/api/sessions?_=' + Date.now(), {
             headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-        });
-        const data = await res.json();
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.sessions && data.sessions.length > 0) {
+                sessionsList.innerHTML = data.sessions.map(s => {
+                    const status = getSessionStatus(s);
+                    const isActive = status === 'active';
+                    return `
+                        <div class="session-item clickable ${isActive ? 'active' : 'inactive'}" data-id="${s.id}">
+                            <div class="session-info">
+                                <strong>${s.title}</strong>
+                                <span class="session-meta">${s.classroom_name || 'Sin sede'} | ${new Date(s.created_at.replace(' ', 'T') + '-05:00').toLocaleString('es-CO')}</span>
+                                <span class="session-count">${s.total_present || 0}/${s.total_students || 0} asistencias</span>
+                            </div>
+                            <span class="session-status ${isActive ? 'status-active' : 'status-inactive'}">
+                                ${isActive ? 'Activo' : 'Inactivo'}
+                            </span>
+                        </div>
+                    `;
+                }).join('');
 
-        if (data.sessions && data.sessions.length > 0) {
-            sessionsList.innerHTML = data.sessions.map(s => `
-                <div class="session-item clickable ${s.is_active && s.expires_at > new Date().toISOString() ? 'active' : ''}" data-id="${s.id}">
-                    <div class="session-info">
-                        <strong>${s.title}</strong>
-                        <span class="session-meta">${s.classroom_name || 'Sin sede'} | ${new Date(s.created_at.replace(' ', 'T') + '-05:00').toLocaleString('es-CO')}</span>
-                        <span class="session-count">${s.total_present || 0}/${s.total_students || 0} asistencias</span>
-                    </div>
-                    <span class="session-status ${s.is_active ? 'status-active' : 'status-closed'}">
-                        ${s.is_active ? 'Activa' : 'Cerrada'}
-                    </span>
-                </div>
-            `).join('');
-
-            sessionsList.querySelectorAll('.session-item').forEach(el => {
-                el.addEventListener('click', async () => {
-                    const id = el.dataset.id;
-                    try {
-                        const r = await fetch('/api/sessions/' + id, {
-                            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-                        });
-                        const d = await r.json();
-                        if (r.ok) showQR(d.session);
-                    } catch (e) {
-                        alert('Error al cargar sesión');
-                    }
+                sessionsList.querySelectorAll('.session-item').forEach(el => {
+                    el.addEventListener('click', async () => {
+                        const id = el.dataset.id;
+                        try {
+                            const r = await fetch('/api/sessions/' + id, {
+                                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+                            });
+                            const d = await r.json();
+                            if (r.ok) showQR(d.session);
+                        } catch (e) {
+                            alert('Error al cargar sesión');
+                        }
+                    });
                 });
-            });
-        } else {
-            sessionsList.innerHTML = '<p class="empty">No hay sesiones aún. Crea una nueva sesión para comenzar.</p>';
-        }
-    } catch (e) {
-        sessionsList.innerHTML = '<p class="error">Error al cargar sesiones</p>';
+            } else {
+                sessionsList.innerHTML = '<p class="empty">No hay sesiones aún. Crea una nueva sesión para comenzar.</p>';
+            }
+        })
+        .catch(() => {
+            sessionsList.innerHTML = '<p class="error">Error al cargar sesiones</p>';
+        });
     }
+
+    loadSessions();
+    setInterval(loadSessions, 30000);
 });
 </script>
