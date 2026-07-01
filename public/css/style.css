@@ -5,21 +5,26 @@
 }
 
 :root {
-    --primary: #2563eb;
-    --primary-dark: #1d4ed8;
-    --success: #16a34a;
-    --danger: #dc2626;
-    --warning: #f59e0b;
-    --bg: #f8fafc;
-    --card-bg: #ffffff;
-    --text: #1e293b;
-    --text-muted: #64748b;
-    --border: #e2e8f0;
+    --primary: #1e66f5;
+    --primary-dark: #1852c9;
+    --success: #40a02b;
+    --danger: #d20f39;
+    --warning: #df8e1d;
+    --bg: #eff1f5;
+    --card-bg: #e6e9ef;
+    --text: #4c4f69;
+    --text-muted: #6c6f85;
+    --border: #ccd0da;
     --radius: 8px;
 }
 
 a {
     text-decoration: none;
+    color: var(--primary);
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 body {
@@ -43,6 +48,7 @@ body {
     background: var(--card-bg);
     border-bottom: 1px solid var(--border);
     padding: 12px 0;
+    margin-bottom: 1rem;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -76,6 +82,7 @@ main {
     background: var(--card-bg);
     border-top: 1px solid var(--border);
     padding: 16px 0;
+    margin-top: 1rem;
     text-align: center;
     color: var(--text-muted);
     font-size: 0.875rem;
@@ -89,10 +96,6 @@ h1 {
 h2 {
     font-size: 1.25rem;
     margin-bottom: 12px;
-}
-
-p {
-    margin-bottom: 8px;
 }
 
 /* Forms */
@@ -121,7 +124,7 @@ p {
 .form-group select:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    box-shadow: 0 0 0 3px rgba(30, 102, 245, 0.15);
 }
 
 /* Buttons */
@@ -152,7 +155,7 @@ p {
 }
 
 .btn-danger:hover {
-    background: #b91c1c;
+    background: #b30f30;
 }
 
 .btn-secondary {
@@ -281,18 +284,18 @@ p {
 }
 
 .status-active {
-    background: #dcfce7;
-    color: #166534;
+    background: #d9f5d0;
+    color: #40a02b;
 }
 
 .status-inactive {
-    background: #fef2f2;
-    color: #991b1b;
+    background: #fcd9de;
+    color: #d20f39;
 }
 
 .status-closed {
-    background: #f3f4f6;
-    color: #6b7280;
+    background: #e6e9ef;
+    color: #6c6f85;
 }
 
 /* QR */
@@ -322,7 +325,7 @@ p {
 }
 
 .qr-info code {
-    background: #f1f5f9;
+    background: #e6e9ef;
     padding: 2px 8px;
     border-radius: 4px;
     font-size: 0.75rem;
@@ -412,7 +415,7 @@ p {
 }
 
 .table th {
-    background: #f8fafc;
+    background: #e6e9ef;
     padding: 12px;
     text-align: left;
     font-size: 0.8rem;
@@ -438,18 +441,18 @@ p {
 }
 
 .badge-gps {
-    background: #dbeafe;
-    color: #1e40af;
+    background: #dbe5fc;
+    color: #1e66f5;
 }
 
 .badge-network {
-    background: #fce7f3;
-    color: #9d174d;
+    background: #f5d4ed;
+    color: #ea76cb;
 }
 
 .badge-both {
-    background: #dcfce7;
-    color: #166534;
+    background: #d9f5d0;
+    color: #40a02b;
 }
 
 /* History */
@@ -534,7 +537,7 @@ p {
 }
 
 .badge-present {
-    background: #16a34a;
+    background: #40a02b;
     color: #fff;
     padding: 2px 10px;
     border-radius: 12px;
@@ -542,7 +545,7 @@ p {
 }
 
 .badge-absent {
-    background: #dc2626;
+    background: #d20f39;
     color: #fff;
     padding: 2px 10px;
     border-radius: 12px;
