@@ -16,7 +16,7 @@
     </div>
 
     <div class="section" id="sessionsSection">
-        <h2>Sesiones Recientes</h2>
+        <h2>QRs Recientes</h2>
         <div id="sessionsList" class="sessions-list">
             <p class="loading">Cargando sesiones...</p>
         </div>
