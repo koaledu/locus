@@ -42,5 +42,5 @@ SPDX-License-Identifier = "CC0-1.0"
 [[annotations]]
 path = "public/js/qrcode.min.js"
 precedence = "aggregate"
-SPDX-FileCopyrightText = "2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán"
-SPDX-License-Identifier = "Apache-2.0"
+SPDX-FileCopyrightText = "2011 davidshimjs"
+SPDX-License-Identifier = "MIT"
