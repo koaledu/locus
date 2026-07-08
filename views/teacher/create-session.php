@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán
 //
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: Apache-2.0
 
 <div class="create-session">
     <h1>Crear Nueva Sesión</h1>

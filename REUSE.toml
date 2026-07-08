@@ -7,13 +7,13 @@ SPDX-PackageDownloadLocation = "https://github.com/koaledu/locus"
 path = ".env.example"
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán"
-SPDX-License-Identifier = "MIT"
+SPDX-License-Identifier = "Apache-2.0"
 
 [[annotations]]
 path = "composer.json"
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán"
-SPDX-License-Identifier = "MIT"
+SPDX-License-Identifier = "Apache-2.0"
 
 [[annotations]]
 path = "public/apple-touch-icon.png"
@@ -43,4 +43,4 @@ SPDX-License-Identifier = "CC0-1.0"
 path = "public/js/qrcode.min.js"
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán"
-SPDX-License-Identifier = "MIT"
+SPDX-License-Identifier = "Apache-2.0"
