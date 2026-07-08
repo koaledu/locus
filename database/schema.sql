@@ -1,3 +1,7 @@
+-- SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán
+--
+-- SPDX-License-Identifier: MIT
+
 CREATE DATABASE IF NOT EXISTS locus CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE locus;
 SET NAMES utf8mb4;

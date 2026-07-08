@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán
+//
+// SPDX-License-Identifier: MIT
+
 <div class="auth-form">
     <h1>Iniciar Sesión</h1>
     <form id="loginForm">

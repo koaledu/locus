@@ -1,5 +1,9 @@
 <?php
 
+// SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán
+//
+// SPDX-License-Identifier: MIT
+
 require_once __DIR__ . '/../src/Helpers/Env.php';
 
 $config = require __DIR__ . '/../config/app.php';

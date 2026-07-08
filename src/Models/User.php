@@ -1,5 +1,9 @@
 <?php
 
+// SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán
+//
+// SPDX-License-Identifier: MIT
+
 namespace App\Models;
 
 use App\Helpers\Model;

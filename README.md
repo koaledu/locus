@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán
+
+SPDX-License-Identifier: MIT
+-->
+
 # Locus
 
 Sistema de gestión de asistencias con códigos QR y verificación de ubicación (GPS/Red). Desarrollado en PHP 8.1 sin framework.

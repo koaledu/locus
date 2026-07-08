@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán
+//
+// SPDX-License-Identifier: MIT
+
 <div class="scan-page">
     <?php if (isset($error)): ?>
         <div class="error-card">

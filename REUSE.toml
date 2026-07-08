@@ -1,0 +1,46 @@
+version = 1
+SPDX-PackageName = "locus"
+SPDX-PackageSupplier = "Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán"
+SPDX-PackageDownloadLocation = "https://github.com/koaledu/locus"
+
+[[annotations]]
+path = ".env.example"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "composer.json"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "public/apple-touch-icon.png"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "public/favicon-16x16.png"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "public/favicon-32x32.png"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "public/favicon.svg"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "public/js/qrcode.min.js"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán"
+SPDX-License-Identifier = "MIT"

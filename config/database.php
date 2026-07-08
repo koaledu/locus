@@ -1,5 +1,9 @@
 <?php
 
+// SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán
+//
+// SPDX-License-Identifier: MIT
+
 return [
     'host' => getenv('DB_HOST') ?: 'localhost',
     'port' => getenv('DB_PORT') ?: '3306',

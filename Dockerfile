@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán
+#
+# SPDX-License-Identifier: MIT
+
 FROM php:8.1-apache
 
 LABEL description="Locus - Sistema de gestion de asistencias con QR"

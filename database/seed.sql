@@ -1,3 +1,7 @@
+-- SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán
+--
+-- SPDX-License-Identifier: MIT
+
 -- Seed data for Locus
 -- All passwords: 123456
 -- Hash generated with PHP password_hash('123456', PASSWORD_BCRYPT)

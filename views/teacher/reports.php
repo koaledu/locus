@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán
+//
+// SPDX-License-Identifier: MIT
+
 <div class="reports">
     <h1>Reportes de Asistencia</h1>
     <p class="subtitle">Selecciona una sesión para ver el detalle</p>
