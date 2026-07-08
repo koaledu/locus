@@ -42,5 +42,5 @@ SPDX-License-Identifier = "CC0-1.0"
 [[annotations]]
 path = "public/js/qrcode.min.js"
 precedence = "aggregate"
-SPDX-FileCopyrightText = "2011 davidshimjs"
+SPDX-FileCopyrightText = "2012 davidshimjs"
 SPDX-License-Identifier = "MIT"
