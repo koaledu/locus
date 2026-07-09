@@ -1,7 +1,4 @@
 version = 1
-SPDX-PackageName = "locus"
-SPDX-PackageSupplier = "Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán"
-SPDX-PackageDownloadLocation = "https://github.com/koaledu/locus"
 
 [[annotations]]
 path = ".env.example"
