@@ -1,7 +1,12 @@
 <!--
-SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero, Eduardo Monsalve Ariza, Jesús Manuel Farfán
+SPDX-FileCopyrightText: 2026 Eduardo Monsalve Ariza
+SPDX-FileCopyrightText: 2026 Jesús Manuel Farfán
+SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero
 
 SPDX-License-Identifier: Apache-2.0
+-->
+
+<!--
 -->
 
 # Locus
