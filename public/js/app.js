@@ -83,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (navContent) {
         if (user) {
             navContent.innerHTML = `
-                <span class="nav-user">${user.name}</span>
                 ${user.role === 'organizer' ? '<a href="/organizer/dashboard" class="nav-link">Panel</a>' : ''}
                 ${user.role === 'organizer' ? '<a href="/organizer/locations" class="nav-link">Ubicaciones</a>' : ''}
                 ${user.role === 'participant' ? '<a href="/participant/history" class="nav-link">Mi Historial</a>' : ''}
