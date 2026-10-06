@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         let latitude = null;
         let longitude = null;
+        let gpsError = null;
 
         try {
             const pos = await new Promise((resolve, reject) => {
@@ -71,7 +72,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             latitude = pos.coords.latitude;
             longitude = pos.coords.longitude;
         } catch (e) {
-            console.log('GPS no disponible, se intentará solo validación por red');
+            gpsError = e.code === 1
+                ? 'Permiso de ubicación denegado. Actívalo en los ajustes del navegador.'
+                : 'No se pudo obtener tu ubicación. Revisa que el GPS esté encendido y que la señal sea buena.';
+        }
+
+        // A geofenced session cannot pass without coordinates, so say why
+        // instead of POSTing nulls and surfacing a generic rejection.
+        const needsGps = <?= $session['location_id'] === null ? 'false' : 'true' ?>;
+        if (needsGps && gpsError) {
+            document.getElementById('statusMessage').innerHTML = '';
+            scanResult.style.display = 'block';
+            scanResult.className = 'card error';
+            scanResult.innerHTML = `
+                <h2>❌ GPS no disponible</h2>
+                <p>${gpsError}</p>
+                <p>Esta sesión pide validar la ubicación, así que sin GPS no se puede registrar.</p>
+            `;
+            return;
         }
 
         const res = await fetch('/api/attendance/register', {
