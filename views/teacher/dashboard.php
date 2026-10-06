@@ -1,12 +1,16 @@
+<?php
+
 // SPDX-FileCopyrightText: 2026 Eduardo Monsalve Ariza
 // SPDX-FileCopyrightText: 2026 Jesús Manuel Farfán
 // SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero
 //
 // SPDX-License-Identifier: Apache-2.0
 
+?>
+
 <div class="dashboard">
     <div class="dashboard-header">
-        <h1>Panel del Docente</h1>
+        <h1>Panel del organizador</h1>
         <p>Bienvenido, <?= htmlspecialchars($user['name']) ?></p>
     </div>
 
@@ -22,7 +26,7 @@
     </div>
 
     <div class="section" id="sessionsSection">
-        <h2>QRs Recientes</h2>
+        <h2>QRs recientes</h2>
         <div id="sessionsList" class="sessions-list">
             <p class="loading">Cargando QRs...</p>
         </div>
@@ -65,14 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('qrLink').href = qrUrl;
         document.getElementById('qrLink').textContent = qrUrl;
         qrContainer.innerHTML = '';
-        new QRCode(qrContainer, {
-            text: qrUrl,
-            width: 250,
-            height: 250,
-            colorDark: '#1e293b',
-            colorLight: '#ffffff',
-            correctLevel: QRCode.CorrectLevel.H
-        });
+        renderQR(qrContainer, qrUrl);
         const status = getSessionStatus(session);
         const canClose = status === 'active';
         document.getElementById('closeSessionBtn').style.display = canClose ? 'inline-block' : 'none';
@@ -86,31 +83,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     document.getElementById('closeSessionBtn').addEventListener('click', async () => {
-        if (!currentSessionId) return;
-        if (!confirm('¿Cerrar este código QR? Los estudiantes ya no podrán marcar asistencia.')) return;
-        try {
-            const res = await fetch('/api/sessions/' + currentSessionId + '/close', {
-                method: 'POST',
-                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-            });
-            const text = await res.text();
-            let data;
-            try {
-                data = JSON.parse(text);
-            } catch (_) {
-                alert('Respuesta inesperada (status ' + res.status + '):\n' + text.substring(0, 300));
-                return;
-            }
-            if (res.ok) {
-                qrResult.style.display = 'none';
-                sessionsSection.style.display = 'block';
-                loadSessions();
-            } else {
-                alert('Error ' + res.status + ': ' + (data.error || 'desconocido'));
-            }
-        } catch (e) {
-            alert('Error de conexión: ' + e.message);
-        }
+        const data = await closeSession(currentSessionId);
+        if (!data) return;
+        qrResult.style.display = 'none';
+        sessionsSection.style.display = 'block';
+        loadSessions();
     });
 
     function loadSessions() {
@@ -127,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <div class="session-item clickable ${isActive ? 'active' : 'inactive'}" data-id="${s.id}">
                             <div class="session-info">
                                 <strong>${s.title}</strong>
-                                <span class="session-meta">${s.classroom_name || 'Sin sede'} | ${new Date(s.created_at.replace(' ', 'T') + '-05:00').toLocaleString('es-CO')}</span>
+                                <span class="session-meta">${s.location_name || 'Sin ubicación'} | ${new Date(s.created_at.replace(' ', 'T') + '-05:00').toLocaleString('es-CO')}</span>
                                 <span class="session-count">${s.total_present || 0}/${s.total_students || 0} asistencias</span>
                             </div>
                             <span class="session-status ${isActive ? 'status-active' : 'status-inactive'}">

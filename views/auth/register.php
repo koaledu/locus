@@ -1,8 +1,12 @@
+<?php
+
 // SPDX-FileCopyrightText: 2026 Eduardo Monsalve Ariza
 // SPDX-FileCopyrightText: 2026 Jesús Manuel Farfán
 // SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero
 //
 // SPDX-License-Identifier: Apache-2.0
+
+?>
 
 <div class="auth-form">
     <h1>Registrarse</h1>
@@ -16,7 +20,7 @@
             <input type="email" id="email" name="email" required>
         </div>
         <div class="form-group">
-            <label for="dni">DNI / Documento</label>
+            <label for="dni">Documento de identidad</label>
             <input type="text" id="dni" name="dni">
         </div>
         <div class="form-group">
@@ -26,26 +30,16 @@
         <div class="form-group">
             <label for="role">Rol</label>
             <select id="role" name="role" required>
-                <option value="student">Estudiante</option>
-                <option value="teacher">Docente</option>
+                <option value="student">Participante</option>
+                <option value="teacher">Organizador</option>
             </select>
         </div>
-        <div class="form-group" id="groupField" style="display:none">
-            <label for="group">Semillero de investigación</label>
-            <select id="group" name="group">
-                <option value="">Sin semillero</option>
-                <option value="Ingeniería de Sistemas">Ingeniería de Sistemas</option>
-                <option value="Psicología">Psicología</option>
-            </select>
+        <div class="form-group">
+            <label for="group">Grupo o equipo (opcional)</label>
+            <input type="text" id="group" name="group" placeholder="Ej: Equipo de logística">
         </div>
         <button type="submit" class="btn btn-primary">Crear cuenta</button>
     </form>
     <p class="auth-link">¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
     <div id="registerError" class="error-msg"></div>
 </div>
-
-<script>
-document.getElementById('role').addEventListener('change', function() {
-    document.getElementById('groupField').style.display = this.value === 'student' ? 'block' : 'none';
-});
-</script>

@@ -1,8 +1,12 @@
+<?php
+
 // SPDX-FileCopyrightText: 2026 Eduardo Monsalve Ariza
 // SPDX-FileCopyrightText: 2026 Jesús Manuel Farfán
 // SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero
 //
 // SPDX-License-Identifier: Apache-2.0
+
+?>
 
 <div class="scan-page">
     <?php if (isset($error)): ?>
@@ -13,14 +17,14 @@
         </div>
     <?php elseif (isset($session)): ?>
         <div class="session-info-card">
-            <h1>Registrar Asistencia</h1>
+            <h1>Registrar asistencia</h1>
             <p class="session-title"><strong>Sesión:</strong> <?= htmlspecialchars($session['title']) ?></p>
             <p><strong>Expira:</strong> <span id="expiresAt" class="tabular-nums"><?= htmlspecialchars($session['expires_at']) ?></span></p>
             <p><strong>Validación:</strong>
                 <?php
                 $modeLabels = [
                     'gps_only' => 'Solo GPS',
-                    'network_only' => 'Solo Red',
+                    'network_only' => 'Solo red',
                     'gps_or_network' => 'GPS o Red',
                     'gps_and_network' => 'GPS y Red',
                     'none' => 'Sin validación',
@@ -102,7 +106,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             scanResult.style.display = 'block';
             scanResult.className = 'card success';
             scanResult.innerHTML = `
-                <h2>✅ Asistencia Registrada</h2>
+                <h2>✅ Asistencia registrada</h2>
                 <p>${data.message}</p>
                 <p><strong>Validado por:</strong> ${data.validated_by === 'gps' ? 'GPS' : data.validated_by === 'network' ? 'Red' : data.validated_by === 'none' ? 'Sin validación' : 'GPS + Red'}</p>
             `;

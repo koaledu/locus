@@ -28,7 +28,7 @@ class AuthController
             Router::redirect($route);
             return;
         }
-        Router::render('auth/login', ['title' => 'Iniciar Sesión']);
+        Router::render('auth/login', ['title' => 'Iniciar sesión']);
     }
 
     public function showRegister(): void

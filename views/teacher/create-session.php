@@ -1,24 +1,28 @@
+<?php
+
 // SPDX-FileCopyrightText: 2026 Eduardo Monsalve Ariza
 // SPDX-FileCopyrightText: 2026 Jesús Manuel Farfán
 // SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero
 //
 // SPDX-License-Identifier: Apache-2.0
 
+?>
+
 <div class="create-session">
-    <h1>Crear Nueva Sesión</h1>
+    <h1>Crear nueva sesión</h1>
 
     <form id="createSessionForm">
         <div class="form-group">
             <label for="title">Título de la sesión</label>
-            <input type="text" id="title" name="title" placeholder="Ej: Semillero de Investigación - Sesión 5" required>
+            <input type="text" id="title" name="title" placeholder="Ej: Charla inaugural - Sesión 1" required>
         </div>
 
         <div class="form-group">
-            <label for="classroom_id">Sede</label>
-            <select id="classroom_id" name="classroom_id">
-                <option value="">Sin sede (solo QR)</option>
-                <?php if (!empty($classrooms)): ?>
-                    <?php foreach ($classrooms as $c): ?>
+            <label for="location_id">Ubicación</label>
+            <select id="location_id" name="location_id">
+                <option value="">Sin ubicación (solo QR)</option>
+                <?php if (!empty($locations)): ?>
+                    <?php foreach ($locations as $c): ?>
                         <option value="<?= $c['id'] ?>"><?= htmlspecialchars($c['name']) ?></option>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -40,7 +44,7 @@
     </form>
 
     <div id="qrResult" style="display:none" class="qr-result">
-        <h2>Código QR Generado</h2>
+        <h2>Código QR generado</h2>
         <div class="qr-display" id="qrContainer"></div>
         <div class="qr-info">
             <p><strong>Token:</strong> <code id="qrToken"></code></p>
@@ -76,7 +80,7 @@ document.getElementById('createSessionForm').addEventListener('submit', async (e
             },
             body: JSON.stringify({
                 title: document.getElementById('title').value,
-                classroom_id: document.getElementById('classroom_id').value || null,
+                location_id: document.getElementById('location_id').value || null,
                 expires_at: document.getElementById('expires_at').value || null,
                 expiry_minutes: parseInt(document.getElementById('expiry_minutes').value) || 15
             })
@@ -95,15 +99,7 @@ document.getElementById('createSessionForm').addEventListener('submit', async (e
             document.getElementById('createSessionForm').style.display = 'none';
 
             const qrContainer = document.getElementById('qrContainer');
-            qrContainer.innerHTML = '';
-            new QRCode(qrContainer, {
-                text: qrUrl,
-                width: 250,
-                height: 250,
-                colorDark: '#1e293b',
-                colorLight: '#ffffff',
-                correctLevel: QRCode.CorrectLevel.H
-            });
+            renderQR(qrContainer, qrUrl);
         } else {
             alert(data.error || 'Error al crear sesión');
         }
@@ -116,33 +112,7 @@ document.getElementById('createSessionForm').addEventListener('submit', async (e
 });
 
 document.getElementById('closeSessionBtn').addEventListener('click', async () => {
-    if (!currentSessionId) return;
-    if (!confirm('¿Cerrar este código QR? Los estudiantes ya no podrán marcar asistencia.')) return;
-
-    try {
-        const res = await fetch('/api/sessions/' + currentSessionId + '/close', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            }
-        });
-
-        const text = await res.text();
-        let data;
-        try {
-            data = JSON.parse(text);
-        } catch (_) {
-            alert('Respuesta inesperada (status ' + res.status + '):\n' + text.substring(0, 300));
-            return;
-        }
-        if (res.ok) {
-            alert(data.message || 'Sesión cerrada');
-            window.location.href = '/teacher/dashboard';
-        } else {
-            alert('Error ' + res.status + ': ' + (data.error || 'desconocido'));
-        }
-    } catch (e) {
-        alert('Error de conexión: ' + e.message);
-    }
+    const data = await closeSession(currentSessionId);
+    if (data) window.location.href = '/teacher/dashboard';
 });
 </script>

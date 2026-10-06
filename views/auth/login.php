@@ -1,11 +1,15 @@
+<?php
+
 // SPDX-FileCopyrightText: 2026 Eduardo Monsalve Ariza
 // SPDX-FileCopyrightText: 2026 Jesús Manuel Farfán
 // SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero
 //
 // SPDX-License-Identifier: Apache-2.0
 
+?>
+
 <div class="auth-form">
-    <h1>Iniciar Sesión</h1>
+    <h1>Iniciar sesión</h1>
     <form id="loginForm">
         <div class="form-group">
             <label for="email">Correo electrónico</label>

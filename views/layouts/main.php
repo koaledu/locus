@@ -1,8 +1,12 @@
+<?php
+
 // SPDX-FileCopyrightText: 2026 Eduardo Monsalve Ariza
 // SPDX-FileCopyrightText: 2026 Jesús Manuel Farfán
 // SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero
 //
 // SPDX-License-Identifier: Apache-2.0
+
+?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -28,6 +32,14 @@
     </nav>
 
     <main class="container">
+        <noscript>
+            <div class="error-card">
+                <h1>JavaScript está desactivado</h1>
+                <p>Este sistema necesita JavaScript para funcionar: el inicio de sesión, los códigos QR y el registro de asistencia se procesan en tu navegador.</p>
+                <p>Actívalo en tu navegador y recarga la página.</p>
+            </div>
+        </noscript>
+
         <?php require $viewPath; ?>
     </main>
 

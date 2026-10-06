@@ -25,17 +25,17 @@ class AttendanceController
             return;
         }
 
-        $session = \App\Models\Session::findValidWithClassroom($sessionId, $token);
+        $session = \App\Models\Session::findValidWithLocation($sessionId, $token);
 
         if (!$session) {
             Router::render('student/scan', ['title' => 'Escanea QR', 'error' => 'Sesión expirada o QR inválido']);
             return;
         }
 
-        $validationMode = $session['classroom_id'] === null ? 'none' : ($session['validation_mode'] ?? 'gps_or_network');
+        $validationMode = $session['location_id'] === null ? 'none' : ($session['validation_mode'] ?? 'gps_or_network');
 
         Router::render('student/scan', [
-            'title' => 'Registrar Asistencia',
+            'title' => 'Registrar asistencia',
             'session' => $session,
             'validation_mode' => $validationMode,
         ]);
@@ -52,11 +52,11 @@ class AttendanceController
         }
 
         if ($user['role'] !== 'student') {
-            Router::sendJson(403, ['error' => 'Solo estudiantes pueden registrar asistencia']);
+            Router::sendJson(403, ['error' => 'Solo participantes pueden registrar asistencia']);
             return;
         }
 
-        $session = \App\Models\Session::findValidWithClassroom($data['session_id'], $data['token']);
+        $session = \App\Models\Session::findValidWithLocation($data['session_id'], $data['token']);
 
         if (!$session) {
             Router::sendJson(400, ['error' => 'Sesión expirada o QR inválido']);
@@ -75,7 +75,7 @@ class AttendanceController
         $gpsValid = false;
         $networkValid = false;
 
-        if ($session['classroom_id'] === null) {
+        if ($session['location_id'] === null) {
             $validatedBy = 'none';
         }
 
@@ -111,7 +111,7 @@ class AttendanceController
             switch ($mode) {
                 case 'gps_only':
                     if (!$gpsValid) {
-                        Router::sendJson(403, ['error' => 'Debes estar dentro del aula (GPS)']);
+                        Router::sendJson(403, ['error' => 'Debes estar dentro de la ubicación (GPS)']);
                         return;
                     }
                     $validatedBy = 'gps';
@@ -127,7 +127,7 @@ class AttendanceController
 
                 case 'gps_and_network':
                     if (!$gpsValid || !$networkValid) {
-                        Router::sendJson(403, ['error' => 'Debes estar en el aula Y conectado a la red universitaria']);
+                        Router::sendJson(403, ['error' => 'Debes estar en la ubicación Y conectado a la red autorizada']);
                         return;
                     }
                     $validatedBy = 'both';
@@ -136,7 +136,7 @@ class AttendanceController
                 case 'gps_or_network':
                 default:
                     if (!$gpsValid && !$networkValid) {
-                        Router::sendJson(403, ['error' => 'Debes estar en el aula o conectado a la red universitaria']);
+                        Router::sendJson(403, ['error' => 'Debes estar en la ubicación o conectado a la red autorizada']);
                         return;
                     }
                     $validatedBy = $gpsValid && $networkValid ? 'both' : ($gpsValid ? 'gps' : 'network');
@@ -180,6 +180,6 @@ class AttendanceController
             Router::redirect('/login');
             return;
         }
-        Router::render('student/history', ['title' => 'Mi Historial', 'user' => $user]);
+        Router::render('student/history', ['title' => 'Mi historial', 'user' => $user]);
     }
 }

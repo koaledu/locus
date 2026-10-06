@@ -1,11 +1,15 @@
+<?php
+
 // SPDX-FileCopyrightText: 2026 Eduardo Monsalve Ariza
 // SPDX-FileCopyrightText: 2026 Jesús Manuel Farfán
 // SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero
 //
 // SPDX-License-Identifier: Apache-2.0
 
+?>
+
 <div class="history">
-    <h1>Mi Historial de Asistencia</h1>
+    <h1>Mi historial de asistencia</h1>
 
     <div id="historyList">
         <p class="loading">Cargando historial...</p>
@@ -27,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class="history-info">
                         <strong>${a.session_title}</strong>
                         <span class="history-meta">${new Date(a.session_date.replace(' ', 'T') + '-05:00').toLocaleDateString('es-CO')} - ${new Date(a.created_at.replace(' ', 'T') + '-05:00').toLocaleTimeString('es-CO')}</span>
-                        <span class="history-classroom">${a.classroom_name || 'Sin sede'}</span>
+                        <span class="history-location">${a.location_name || 'Sin ubicación'}</span>
                     </div>
                     <span class="badge badge-${a.validated_by}">${a.validated_by}</span>
                 </div>

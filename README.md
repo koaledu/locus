@@ -11,7 +11,7 @@ SPDX-License-Identifier: Apache-2.0
 
 # Locus
 
-Sistema de gestión de asistencias con códigos QR y verificación de ubicación (GPS/Red). Desarrollado en PHP 8.1 sin framework.
+Sistema de control de asistencias con códigos QR y verificación de ubicación (GPS/Red). Pensado para eventos de cualquier tipo: un organizador crea una sesión, los participantes escanean el QR y se registra su asistencia, con o sin geocerca. Desarrollado en PHP 8.1 sin framework.
 
 ## Requisitos
 
@@ -42,23 +42,20 @@ ip addr show | grep 'inet ' | grep -v 127.0.0.1
 
 Accede desde el PC usando la IP local (ej. `http://192.168.1.7:8080`) — así los códigos QR contendrán esa IP y podrán escanearse desde el celular en la misma red WiFi.
 
-### Usuarios de prueba (password: `123456`)
+### Usuarios de prueba (contraseña: `123456`)
 
-| Email | Rol | Semillero |
-|-------|-----|-----------|
-| angely@udi.edu.co | Docente | Psicología |
-| alzate@udi.edu.co | Docente | Ingeniería de Sistemas |
-| angel@udi.edu.co | Estudiante | Ingeniería de Sistemas |
-| farfan@udi.edu.co | Estudiante | Ingeniería de Sistemas |
-| monsalve@udi.edu.co | Estudiante | Ingeniería de Sistemas |
-| botero@udi.edu.co | Estudiante | Ingeniería de Sistemas |
-| malo@udi.edu.co | Estudiante | Psicología |
-| valeria@udi.edu.co | Estudiante | Psicología |
+| Email | Rol |
+|-------|-----|
+| y.corrales@locus-demo.test | Organizador |
+| w.sanclemente@locus-demo.test | Participante |
+| k.penarreta@locus-demo.test | Participante |
 
-## Sedes
+## Ubicaciones de registro
 
-| Sede | Coordenadas | WiFi |
-|------|-------------|------|
+Las coordenadas quedan mal en los datos de ejemplo (caen fuera de Bogotá). Créalas desde la app: **Panel → Ubicaciones → clic en el mapa**.
+
+| Ubicación | Coordenadas | WiFi |
+|-----------|-------------|------|
 | Ana Frank | 7.0587899, -73.8626501 | WBAF-estudiantes |
 | Marie Curie | 7.0623784, -73.8580640 | WBcaMC-estudiantes |
 

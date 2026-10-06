@@ -13,7 +13,6 @@ use App\Helpers\Model;
 class Attendance extends Model
 {
     protected static string $table = 'attendance';
-    protected static array $fillable = ['session_id', 'student_id', 'latitude', 'longitude', 'validated_by', 'ip_address', 'user_agent'];
 
     public static function findBySessionAndStudent(int $sessionId, int $studentId): ?array
     {
@@ -26,26 +25,14 @@ class Attendance extends Model
     public static function studentHistory(int $studentId): array
     {
         return self::fetchAll(
-            'SELECT a.*, s.title as session_title, s.created_at as session_date, c.name as classroom_name
+            'SELECT a.*, s.title as session_title, s.created_at as session_date, c.name as location_name
              FROM attendance a
              JOIN sessions s ON a.session_id = s.id
-             LEFT JOIN classrooms c ON s.classroom_id = c.id
+             LEFT JOIN locations c ON s.location_id = c.id
              WHERE a.student_id = ?
              ORDER BY a.created_at DESC
              LIMIT 50',
             [$studentId]
-        );
-    }
-
-    public static function sessionAttendance(int $sessionId): array
-    {
-        return self::fetchAll(
-            'SELECT a.*, u.name as student_name, u.email as student_email, u.dni as student_dni
-             FROM attendance a
-             JOIN users u ON a.student_id = u.id
-             WHERE a.session_id = ?
-             ORDER BY a.created_at ASC',
-            [$sessionId]
         );
     }
 
@@ -74,14 +61,5 @@ class Attendance extends Model
              ORDER BY a.created_at ASC',
             [$sessionId]
         );
-    }
-
-    public static function countBySession(int $sessionId): int
-    {
-        $result = self::fetchOne(
-            'SELECT COUNT(*) as total FROM attendance WHERE session_id = ?',
-            [$sessionId]
-        );
-        return $result['total'] ?? 0;
     }
 }

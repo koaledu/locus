@@ -11,37 +11,26 @@ namespace App\Helpers;
 class Router
 {
     private array $routes = [];
-    private array $middleware = [];
 
-    public function get(string $path, callable $handler, array $middleware = []): void
+    public function get(string $path, callable $handler): void
     {
-        $this->routes['GET'][$path] = ['handler' => $handler, 'middleware' => $middleware];
+        $this->routes['GET'][$path] = $handler;
     }
 
-    public function post(string $path, callable $handler, array $middleware = []): void
+    public function post(string $path, callable $handler): void
     {
-        $this->routes['POST'][$path] = ['handler' => $handler, 'middleware' => $middleware];
+        $this->routes['POST'][$path] = $handler;
     }
 
-    public function put(string $path, callable $handler, array $middleware = []): void
+    public function delete(string $path, callable $handler): void
     {
-        $this->routes['PUT'][$path] = ['handler' => $handler, 'middleware' => $middleware];
-    }
-
-    public function delete(string $path, callable $handler, array $middleware = []): void
-    {
-        $this->routes['DELETE'][$path] = ['handler' => $handler, 'middleware' => $middleware];
-    }
-
-    public function addMiddleware(callable $middleware): void
-    {
-        $this->middleware[] = $middleware;
+        $this->routes['DELETE'][$path] = $handler;
     }
 
     public function dispatch(): void
     {
         header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+        header('Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS');
         header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
         if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -53,30 +42,18 @@ class Router
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $uri = rtrim($uri, '/') ?: '/';
 
-        foreach ($this->middleware as $mw) {
-            call_user_func($mw);
-        }
-
         if (!isset($this->routes[$method])) {
             $this->sendJson(405, ['error' => 'Method not allowed']);
             return;
         }
 
-        foreach ($this->routes[$method] as $path => $route) {
+        foreach ($this->routes[$method] as $path => $handler) {
             $pattern = preg_replace('/\{(\w+)\}/', '(?P<$1>[^/]+)', $path);
             $pattern = '#^' . $pattern . '$#';
 
             if (preg_match($pattern, $uri, $matches)) {
                 $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
-
-                foreach ($route['middleware'] as $mw) {
-                    $result = call_user_func($mw);
-                    if ($result !== null) {
-                        return;
-                    }
-                }
-
-                call_user_func($route['handler'], $params);
+                call_user_func($handler, $params);
                 return;
             }
         }
@@ -107,16 +84,6 @@ class Router
             throw new \RuntimeException("View not found: $view");
         }
         require __DIR__ . '/../../views/layouts/main.php';
-    }
-
-    public static function renderPartial(string $view, array $data = []): void
-    {
-        extract($data);
-        $viewPath = __DIR__ . '/../../views/' . $view . '.php';
-        if (!file_exists($viewPath)) {
-            throw new \RuntimeException("View not found: $view");
-        }
-        require $viewPath;
     }
 
     public static function getJsonBody(): array

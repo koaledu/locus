@@ -35,6 +35,7 @@ if ($uri !== '/' && file_exists(__DIR__ . $uri)) {
 
 use App\Helpers\Router;
 use App\Controllers\AuthController;
+use App\Controllers\LocationController;
 use App\Controllers\SessionController;
 use App\Controllers\AttendanceController;
 use App\Controllers\ReportController;
@@ -69,6 +70,10 @@ $router->get('/teacher/session/create', function () {
 
 $router->get('/teacher/reports', function () {
     (new ReportController())->showReports();
+});
+
+$router->get('/teacher/locations', function () {
+    (new LocationController())->show();
 });
 
 $router->get('/student/history', function () {
@@ -125,6 +130,14 @@ $router->get('/api/attendance/history', function () {
 
 $router->get('/api/reports', function () {
     (new ReportController())->list();
+});
+
+$router->post('/api/locations', function () {
+    (new LocationController())->create();
+});
+
+$router->delete('/api/locations/{id}', function (array $params) {
+    (new LocationController())->delete((int)$params['id']);
 });
 
 $router->get('/api/reports/{id}/csv', function (array $params) {

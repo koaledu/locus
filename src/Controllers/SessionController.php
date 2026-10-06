@@ -9,7 +9,6 @@
 namespace App\Controllers;
 
 use App\Helpers\Router;
-use App\Models\Classroom;
 use App\Models\Session;
 use App\Services\AuthService;
 use App\Services\QRService;
@@ -24,11 +23,11 @@ class SessionController
             return;
         }
 
-        $classrooms = Classroom::allOrdered();
+        $locations = \App\Helpers\Database::fetchAll('SELECT * FROM locations ORDER BY name');
         Router::render('teacher/create-session', [
-            'title' => 'Crear Sesión',
+            'title' => 'Crear sesión',
             'user' => $user,
-            'classrooms' => $classrooms,
+            'locations' => $locations,
         ]);
     }
 
@@ -36,7 +35,7 @@ class SessionController
     {
         $user = AuthService::getAuthenticatedUser();
         if (!$user || $user['role'] !== 'teacher') {
-            Router::sendJson(403, ['error' => 'Solo docentes pueden crear sesiones']);
+            Router::sendJson(403, ['error' => 'Solo organizadores pueden crear sesiones']);
             return;
         }
 
@@ -54,7 +53,7 @@ class SessionController
 
         $sessionId = Session::create([
             'teacher_id' => $user['id'],
-            'classroom_id' => $data['classroom_id'] ?? null,
+            'location_id' => $data['location_id'] ?? null,
             'group' => $user['group'] ?? null,
             'title' => $data['title'] ?? 'Sesión sin título',
             'qr_token' => $token,
@@ -94,7 +93,7 @@ class SessionController
 
     public function get(int $id): void
     {
-        $session = Session::findWithClassroom($id);
+        $session = Session::findWithLocation($id);
 
         if (!$session) {
             Router::sendJson(404, ['error' => 'Sesión no encontrada']);
@@ -129,6 +128,6 @@ class SessionController
             Router::redirect('/login');
             return;
         }
-        Router::render('teacher/dashboard', ['title' => 'Panel Docente', 'user' => $user]);
+        Router::render('teacher/dashboard', ['title' => 'Panel del organizador', 'user' => $user]);
     }
 }

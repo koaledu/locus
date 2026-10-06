@@ -41,6 +41,39 @@ async function apiRequest(path, options = {}) {
     return res;
 }
 
+async function closeSession(sessionId) {
+    if (!sessionId) return;
+    if (!confirm('¿Cerrar este código QR? Los estudiantes ya no podrán marcar asistencia.')) return;
+
+    try {
+        const res = await apiRequest('/sessions/' + sessionId + '/close', { method: 'POST' });
+        const text = await res.text();
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (_) {
+            alert('Respuesta inesperada (status ' + res.status + '):\n' + text.substring(0, 300));
+            return;
+        }
+        if (res.ok) return data;
+        alert('Error ' + res.status + ': ' + (data.error || 'desconocido'));
+    } catch (e) {
+        alert('Error de conexión: ' + e.message);
+    }
+}
+
+function renderQR(container, text) {
+    container.innerHTML = '';
+    new QRCode(container, {
+        text: text,
+        width: 250,
+        height: 250,
+        colorDark: '#1e293b',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+    });
+}
+
 // Auth
 document.addEventListener('DOMContentLoaded', () => {
     const user = getUser();
@@ -52,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
             navContent.innerHTML = `
                 <span class="nav-user">${user.name}</span>
                 ${user.role === 'teacher' ? '<a href="/teacher/dashboard" class="nav-link">Panel</a>' : ''}
+                ${user.role === 'teacher' ? '<a href="/teacher/locations" class="nav-link">Ubicaciones</a>' : ''}
                 ${user.role === 'student' ? '<a href="/student/history" class="nav-link">Mi Historial</a>' : ''}
             `;
             if (logoutBtn) logoutBtn.style.display = 'inline-block';
@@ -152,7 +186,7 @@ if (registerForm) {
 
 // Protected route check
 document.addEventListener('DOMContentLoaded', () => {
-    const protectedPaths = ['/teacher/dashboard', '/teacher/session/create', '/teacher/reports', '/student/history'];
+    const protectedPaths = ['/teacher/dashboard', '/teacher/session/create', '/teacher/reports', '/teacher/locations', '/student/history'];
     const currentPath = window.location.pathname;
 
     if (protectedPaths.includes(currentPath) && !getToken()) {

@@ -20,7 +20,7 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE classrooms (
+CREATE TABLE locations (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     latitude DECIMAL(10, 7) NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE classrooms (
 CREATE TABLE sessions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     teacher_id INT NOT NULL,
-    classroom_id INT,
+    location_id INT,
     `group` VARCHAR(100),
     title VARCHAR(200) NOT NULL,
     qr_token VARCHAR(64) NOT NULL UNIQUE,
@@ -42,7 +42,7 @@ CREATE TABLE sessions (
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (teacher_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (classroom_id) REFERENCES classrooms(id) ON DELETE SET NULL
+    FOREIGN KEY (location_id) REFERENCES locations(id) ON DELETE SET NULL
 );
 
 CREATE TABLE attendance (
@@ -62,9 +62,9 @@ CREATE TABLE attendance (
 
 CREATE TABLE geofence_config (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    classroom_id INT NOT NULL,
+    location_id INT NOT NULL,
     validation_mode ENUM('gps_only', 'network_only', 'gps_or_network', 'gps_and_network') NOT NULL DEFAULT 'gps_or_network',
-    FOREIGN KEY (classroom_id) REFERENCES classrooms(id) ON DELETE CASCADE
+    FOREIGN KEY (location_id) REFERENCES locations(id) ON DELETE CASCADE
 );
 
 CREATE TABLE refresh_tokens (

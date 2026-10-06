@@ -1,11 +1,15 @@
+<?php
+
 // SPDX-FileCopyrightText: 2026 Eduardo Monsalve Ariza
 // SPDX-FileCopyrightText: 2026 Jesús Manuel Farfán
 // SPDX-FileCopyrightText: 2026 Ángel Manuel Quintero
 //
 // SPDX-License-Identifier: Apache-2.0
 
+?>
+
 <div class="reports">
-    <h1>Reportes de Asistencia</h1>
+    <h1>Reportes de asistencia</h1>
     <p class="subtitle">Selecciona una sesión para ver el detalle</p>
 
     <div id="sessionsReportList" class="sessions-list">
@@ -22,7 +26,7 @@
             </div>
             <div class="stat-card">
                 <span class="stat-number" id="totalStudents">0</span>
-                <span class="stat-label">Total Estudiantes</span>
+                <span class="stat-label">Total participantes</span>
             </div>
             <div class="stat-card">
                 <span class="stat-number" id="attendancePercent">0%</span>
@@ -37,7 +41,7 @@
                 <tr>
                     <th>Estado</th>
                     <th>DNI</th>
-                    <th>Estudiante</th>
+                    <th>Participante</th>
                     <th>Hora</th>
                     <th>Validación</th>
                 </tr>
@@ -84,7 +88,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const data = await res.json();
 
         document.getElementById('detailTitle').textContent = data.session.title;
-        document.getElementById('detailGroup').textContent = data.session.group ? 'Semillero: ' + data.session.group : '';
+        document.getElementById('detailGroup').textContent = data.session.group ? 'Grupo: ' + data.session.group : '';
         document.getElementById('totalPresent').textContent = data.total_present;
         document.getElementById('totalStudents').textContent = data.total_students;
         document.getElementById('attendancePercent').textContent =
@@ -111,7 +115,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 `;
             }).join('');
         } else {
-            tbody.innerHTML = '<tr><td colspan="5">No hay estudiantes registrados</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5">No hay participantes registrados</td></tr>';
         }
 
         document.getElementById('sessionDetail').style.display = 'block';
