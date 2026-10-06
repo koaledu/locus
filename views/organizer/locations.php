@@ -132,6 +132,7 @@ document.getElementById('locationForm').addEventListener('submit', async e => {
     try {
         const res = await fetch('/api/locations', { method: 'POST', headers: authHeaders, body: JSON.stringify(body) });
         if (!res.ok) {
+            const data = await res.json().catch(() => ({}));
             errorEl.textContent = data.error || 'Error al guardar la ubicación';
             return;
         }
