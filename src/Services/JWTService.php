@@ -25,7 +25,7 @@ class JWTService
         $header = self::base64UrlEncode(json_encode(['typ' => 'JWT', 'alg' => 'HS256']));
 
         $payload['iat'] = time();
-        $payload['exp'] = time() + $this->expiry;
+        $payload['exp'] ??= time() + $this->expiry;
         $payloadEncoded = self::base64UrlEncode(json_encode($payload));
 
         $signature = self::base64UrlEncode(
