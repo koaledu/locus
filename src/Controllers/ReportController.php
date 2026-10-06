@@ -73,7 +73,7 @@ class ReportController
 
         $output = fopen('php://output', 'w');
         fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
-        fputcsv($output, ['Hora', 'Documento', 'Participante', 'Email', 'Validación', 'Latitud', 'Longitud', 'IP']);
+        fputcsv($output, ['Hora', 'Documento', 'Participante', 'Email', 'Validación', 'Latitud', 'Longitud']);
 
         foreach ($attendance as $row) {
             fputcsv($output, $row);

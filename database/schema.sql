@@ -50,8 +50,6 @@ CREATE TABLE attendance (
     latitude DECIMAL(10, 7),
     longitude DECIMAL(10, 7),
     validated_by ENUM('gps', 'none') NOT NULL,
-    ip_address VARCHAR(45),
-    user_agent TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (session_id) REFERENCES sessions(id) ON DELETE CASCADE,
     FOREIGN KEY (participant_id) REFERENCES users(id) ON DELETE CASCADE,

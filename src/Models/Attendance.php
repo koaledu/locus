@@ -40,7 +40,7 @@ class Attendance extends Model
     {
         return self::fetchAll(
             'SELECT u.id, u.name, u.email, u.document_id, u.`group`,
-                    a.id as attendance_id, a.created_at as attended_at, a.validated_by, a.ip_address
+                    a.id as attendance_id, a.created_at as attended_at, a.validated_by
              FROM users u
              LEFT JOIN attendance a ON a.session_id = ? AND a.participant_id = u.id
              WHERE u.role = "participant"
@@ -54,7 +54,7 @@ class Attendance extends Model
     {
         return self::fetchAll(
             'SELECT a.created_at as hora, u.document_id, u.name as participante, u.email,
-                    a.validated_by as validacion, a.latitude, a.longitude, a.ip_address
+                    a.validated_by as validacion, a.latitude, a.longitude
              FROM attendance a
              JOIN users u ON a.participant_id = u.id
              WHERE a.session_id = ?
