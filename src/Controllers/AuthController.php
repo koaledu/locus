@@ -24,7 +24,7 @@ class AuthController
     {
         $user = AuthService::getAuthenticatedUser();
         if ($user) {
-            $route = $user['role'] === 'teacher' ? '/teacher/dashboard' : '/student/history';
+            $route = $user['role'] === 'organizer' ? '/organizer/dashboard' : '/participant/history';
             Router::redirect($route);
             return;
         }
@@ -35,7 +35,7 @@ class AuthController
     {
         $user = AuthService::getAuthenticatedUser();
         if ($user) {
-            $route = $user['role'] === 'teacher' ? '/teacher/dashboard' : '/student/history';
+            $route = $user['role'] === 'organizer' ? '/organizer/dashboard' : '/participant/history';
             Router::redirect($route);
             return;
         }

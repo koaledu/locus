@@ -15,11 +15,11 @@
     </div>
 
     <div class="dashboard-actions">
-        <a href="/teacher/session/create" class="card">
+        <a href="/organizer/session/create" class="card">
             <span class="card-icon">+</span>
             <span class="card-text">Nueva Sesión</span>
         </a>
-        <a href="/teacher/reports" class="card">
+        <a href="/organizer/reports" class="card">
             <span class="card-icon">📊</span>
             <span class="card-text">Reportes</span>
         </a>
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <div class="session-info">
                                 <strong>${s.title}</strong>
                                 <span class="session-meta">${s.location_name || 'Sin ubicación'} | ${new Date(s.created_at.replace(' ', 'T') + '-05:00').toLocaleString('es-CO')}</span>
-                                <span class="session-count">${s.total_present || 0}/${s.total_students || 0} asistencias</span>
+                                <span class="session-count">${s.total_present || 0}/${s.total_participants || 0} asistencias</span>
                             </div>
                             <span class="session-status ${isActive ? 'status-active' : 'status-inactive'}">
                                 ${isActive ? 'Activo' : 'Inactivo'}

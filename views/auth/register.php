@@ -20,8 +20,8 @@
             <input type="email" id="email" name="email" required>
         </div>
         <div class="form-group">
-            <label for="dni">Documento de identidad</label>
-            <input type="text" id="dni" name="dni">
+            <label for="document_id">Documento de identidad</label>
+            <input type="text" id="document_id" name="document_id">
         </div>
         <div class="form-group">
             <label for="password">Contraseña</label>
@@ -30,8 +30,8 @@
         <div class="form-group">
             <label for="role">Rol</label>
             <select id="role" name="role" required>
-                <option value="student">Participante</option>
-                <option value="teacher">Organizador</option>
+                <option value="participant">Participante</option>
+                <option value="organizer">Organizador</option>
             </select>
         </div>
         <div class="form-group">

@@ -19,7 +19,7 @@ class ReportController
     public function list(): void
     {
         $user = AuthService::getAuthenticatedUser();
-        if (!$user || $user['role'] !== 'teacher') {
+        if (!$user || $user['role'] !== 'organizer') {
             Router::sendJson(403, ['error' => 'No autorizado']);
             return;
         }
@@ -27,25 +27,25 @@ class ReportController
         $sessionId = $_GET['session_id'] ?? null;
 
         if ($sessionId) {
-            $session = Session::findByIdAndTeacher((int)$sessionId, $user['id']);
+            $session = Session::findByIdAndOrganizer((int)$sessionId, $user['id']);
 
             if (!$session) {
                 Router::sendJson(404, ['error' => 'Sesión no encontrada']);
                 return;
             }
 
-            $attendance = Attendance::sessionAttendanceWithStudents((int)$sessionId, $session['group'] ?? null);
-            $totalStudents = count($attendance);
+            $attendance = Attendance::sessionAttendanceWithParticipants((int)$sessionId, $session['group'] ?? null);
+            $totalParticipants = count($attendance);
             $totalPresent = count(array_filter($attendance, fn($a) => $a['attendance_id'] !== null));
 
             Router::sendJson(200, [
                 'session' => $session,
-                'students' => $attendance,
-                'total_students' => $totalStudents,
+                'participants' => $attendance,
+                'total_participants' => $totalParticipants,
                 'total_present' => $totalPresent,
             ]);
         } else {
-            $sessions = Session::teacherReportSessions($user['id']);
+            $sessions = Session::organizerReportSessions($user['id']);
 
             Router::sendJson(200, ['sessions' => $sessions]);
         }
@@ -54,12 +54,12 @@ class ReportController
     public function exportCSV(int $sessionId): void
     {
         $user = AuthService::getAuthenticatedUser();
-        if (!$user || $user['role'] !== 'teacher') {
+        if (!$user || $user['role'] !== 'organizer') {
             Router::sendJson(403, ['error' => 'No autorizado']);
             return;
         }
 
-        $session = Session::findByIdAndTeacher($sessionId, $user['id']);
+        $session = Session::findByIdAndOrganizer($sessionId, $user['id']);
 
         if (!$session) {
             Router::sendJson(404, ['error' => 'Sesión no encontrada']);
@@ -73,7 +73,7 @@ class ReportController
 
         $output = fopen('php://output', 'w');
         fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
-        fputcsv($output, ['Hora', 'DNI', 'Estudiante', 'Email', 'Validación', 'Latitud', 'Longitud', 'IP']);
+        fputcsv($output, ['Hora', 'Documento', 'Participante', 'Email', 'Validación', 'Latitud', 'Longitud', 'IP']);
 
         foreach ($attendance as $row) {
             fputcsv($output, $row);
@@ -86,10 +86,10 @@ class ReportController
     public function showReports(): void
     {
         $user = AuthService::getAuthenticatedUser();
-        if (!$user || $user['role'] !== 'teacher') {
+        if (!$user || $user['role'] !== 'organizer') {
             Router::redirect('/login');
             return;
         }
-        Router::render('teacher/reports', ['title' => 'Reportes', 'user' => $user]);
+        Router::render('organizer/reports', ['title' => 'Reportes', 'user' => $user]);
     }
 }

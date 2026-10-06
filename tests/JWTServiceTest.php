@@ -22,13 +22,13 @@ class JWTServiceTest extends TestCase
 
     public function testEncodeAndDecode(): void
     {
-        $payload = ['user_id' => 1, 'role' => 'teacher'];
+        $payload = ['user_id' => 1, 'role' => 'organizer'];
         $token = $this->jwt->encode($payload);
 
         $decoded = $this->jwt->decode($token);
         $this->assertNotNull($decoded);
         $this->assertEquals(1, $decoded['user_id']);
-        $this->assertEquals('teacher', $decoded['role']);
+        $this->assertEquals('organizer', $decoded['role']);
     }
 
     public function testInvalidToken(): void
@@ -39,7 +39,7 @@ class JWTServiceTest extends TestCase
 
     public function testTamperedToken(): void
     {
-        $payload = ['user_id' => 1, 'role' => 'student'];
+        $payload = ['user_id' => 1, 'role' => 'participant'];
         $token = $this->jwt->encode($payload);
 
         $parts = explode('.', $token);
@@ -52,7 +52,7 @@ class JWTServiceTest extends TestCase
 
     public function testExpiredToken(): void
     {
-        $token = $this->jwt->encode(['user_id' => 1, 'role' => 'student', 'exp' => time() - 3600]);
+        $token = $this->jwt->encode(['user_id' => 1, 'role' => 'participant', 'exp' => time() - 3600]);
 
         $decoded = $this->jwt->decode($token);
         $this->assertNull($decoded);

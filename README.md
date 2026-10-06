@@ -34,7 +34,7 @@ Podman rootless publica los puertos en todas las interfaces, sin necesidad de `s
 ip route get 1.1.1.1 | grep -oP 'src \K[\d.]+'
 ```
 
-Abre esa IP en el celular con el mismo WiFi (ej. `http://192.168.1.17:8080`). Los códigos QR que generes contendrán esa IP y se escanearán desde el teléfono sin problema.
+Abre esa IP en el celular conectado a la misma red (ej. `http://192.168.1.17:8080`). Los códigos QR que generes contendrán esa IP y se escanearán desde el teléfono sin problema.
 
 Si el celular no conecta, casi siempre es que está en una red de invitados con aislamiento de clientes activado, que bloquea el tráfico entre dispositivos.
 

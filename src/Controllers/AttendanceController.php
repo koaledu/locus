@@ -29,18 +29,18 @@ class AttendanceController
         $sessionId = (int)($_GET['session'] ?? 0);
 
         if (empty($token) || $sessionId <= 0) {
-            Router::render('student/scan', ['title' => 'Escanea QR', 'error' => 'QR inválido']);
+            Router::render('participant/scan', ['title' => 'Escanea QR', 'error' => 'QR inválido']);
             return;
         }
 
         $session = \App\Models\Session::findValidWithLocation($sessionId, $token);
 
         if (!$session) {
-            Router::render('student/scan', ['title' => 'Escanea QR', 'error' => 'Sesión expirada o QR inválido']);
+            Router::render('participant/scan', ['title' => 'Escanea QR', 'error' => 'Sesión expirada o QR inválido']);
             return;
         }
 
-        Router::render('student/scan', [
+        Router::render('participant/scan', [
             'title' => 'Registrar asistencia',
             'session' => $session,
         ]);
@@ -56,7 +56,7 @@ class AttendanceController
             return;
         }
 
-        if ($user['role'] !== 'student') {
+        if ($user['role'] !== 'participant') {
             Router::sendJson(403, ['error' => 'Solo participantes pueden registrar asistencia']);
             return;
         }
@@ -68,23 +68,23 @@ class AttendanceController
             return;
         }
 
-        $existing = Attendance::findBySessionAndStudent($session['id'], $user['id']);
+        $existing = Attendance::findBySessionAndParticipant($session['id'], $user['id']);
 
         if ($existing) {
             Router::sendJson(409, ['error' => 'Ya registraste tu asistencia a esta sesión']);
             return;
         }
 
-        $studentLat = $data['latitude'] ?? null;
-        $studentLng = $data['longitude'] ?? null;
+        $participantLat = $data['latitude'] ?? null;
+        $participantLng = $data['longitude'] ?? null;
         $validatedBy = 'none';
 
         // A session without a location is QR-only: nothing to check.
         if ($session['location_id'] !== null) {
-            $gpsValid = $studentLat !== null && $studentLng !== null
+            $gpsValid = $participantLat !== null && $participantLng !== null
                 && LocationValidator::validateGPS(
-                    (float)$studentLat,
-                    (float)$studentLng,
+                    (float)$participantLat,
+                    (float)$participantLng,
                     (float)$session['latitude'],
                     (float)$session['longitude'],
                     (int)$session['radius_meters']
@@ -99,9 +99,9 @@ class AttendanceController
 
         Attendance::create([
             'session_id' => $session['id'],
-            'student_id' => $user['id'],
-            'latitude' => $studentLat,
-            'longitude' => $studentLng,
+            'participant_id' => $user['id'],
+            'latitude' => $participantLat,
+            'longitude' => $participantLng,
             'validated_by' => $validatedBy,
             'ip_address' => self::clientIp(),
             'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? null,
@@ -121,7 +121,7 @@ class AttendanceController
             return;
         }
 
-        $records = Attendance::studentHistory($user['id']);
+        $records = Attendance::participantHistory($user['id']);
 
         Router::sendJson(200, ['attendance' => $records]);
     }
@@ -133,6 +133,6 @@ class AttendanceController
             Router::redirect('/login');
             return;
         }
-        Router::render('student/history', ['title' => 'Mi historial', 'user' => $user]);
+        Router::render('participant/history', ['title' => 'Mi historial', 'user' => $user]);
     }
 }

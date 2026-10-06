@@ -25,7 +25,7 @@
                 <span class="stat-label">Presentes</span>
             </div>
             <div class="stat-card">
-                <span class="stat-number" id="totalStudents">0</span>
+                <span class="stat-number" id="totalParticipants">0</span>
                 <span class="stat-label">Total participantes</span>
             </div>
             <div class="stat-card">
@@ -40,7 +40,7 @@
             <thead>
                 <tr>
                     <th>Estado</th>
-                    <th>DNI</th>
+                    <th>Documento</th>
                     <th>Participante</th>
                     <th>Hora</th>
                     <th>Validación</th>
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class="session-info">
                         <strong>${s.title}</strong>
                         <span class="session-meta">${new Date(s.created_at).toLocaleDateString('es-CO')}${s.group ? ' · ' + s.group : ''}</span>
-                        <span class="session-count">${s.total_present}/${s.total_students} asistencias</span>
+                        <span class="session-count">${s.total_present}/${s.total_participants} asistencias</span>
                     </div>
                 </div>
             `).join('');
@@ -90,14 +90,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('detailTitle').textContent = data.session.title;
         document.getElementById('detailGroup').textContent = data.session.group ? 'Grupo: ' + data.session.group : '';
         document.getElementById('totalPresent').textContent = data.total_present;
-        document.getElementById('totalStudents').textContent = data.total_students;
+        document.getElementById('totalParticipants').textContent = data.total_participants;
         document.getElementById('attendancePercent').textContent =
-            data.total_students > 0 ? Math.round((data.total_present / data.total_students) * 100) + '%' : '0%';
+            data.total_participants > 0 ? Math.round((data.total_present / data.total_participants) * 100) + '%' : '0%';
         document.getElementById('exportCsv').href = '/api/reports/' + sessionId + '/csv';
 
         const tbody = document.getElementById('attendanceBody');
-        if (data.students && data.students.length > 0) {
-            tbody.innerHTML = data.students.map(s => {
+        if (data.participants && data.participants.length > 0) {
+            tbody.innerHTML = data.participants.map(s => {
                 const attended = s.attendance_id !== null;
                 const time = attended ? new Date(s.attended_at).toLocaleTimeString('es-CO') : '-';
                 const badge = attended
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return `
                     <tr class="${attended ? 'row-present' : 'row-absent'}">
                         <td>${badge}</td>
-                        <td>${s.dni || '-'}</td>
+                        <td>${s.document_id || '-'}</td>
                         <td>${s.name}</td>
                         <td>${time}</td>
                         <td>${validation}</td>

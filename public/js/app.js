@@ -43,7 +43,7 @@ async function apiRequest(path, options = {}) {
 
 async function closeSession(sessionId) {
     if (!sessionId) return;
-    if (!confirm('¿Cerrar este código QR? Los estudiantes ya no podrán marcar asistencia.')) return;
+    if (!confirm('¿Cerrar este código QR? Los participantes ya no podrán marcar asistencia.')) return;
 
     try {
         const res = await apiRequest('/sessions/' + sessionId + '/close', { method: 'POST' });
@@ -84,9 +84,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (user) {
             navContent.innerHTML = `
                 <span class="nav-user">${user.name}</span>
-                ${user.role === 'teacher' ? '<a href="/teacher/dashboard" class="nav-link">Panel</a>' : ''}
-                ${user.role === 'teacher' ? '<a href="/teacher/locations" class="nav-link">Ubicaciones</a>' : ''}
-                ${user.role === 'student' ? '<a href="/student/history" class="nav-link">Mi Historial</a>' : ''}
+                ${user.role === 'organizer' ? '<a href="/organizer/dashboard" class="nav-link">Panel</a>' : ''}
+                ${user.role === 'organizer' ? '<a href="/organizer/locations" class="nav-link">Ubicaciones</a>' : ''}
+                ${user.role === 'participant' ? '<a href="/participant/history" class="nav-link">Mi Historial</a>' : ''}
             `;
             if (logoutBtn) logoutBtn.style.display = 'inline-block';
         } else {
@@ -136,7 +136,7 @@ if (loginForm) {
                 localStorage.setItem('refresh_token', data.refresh_token);
                 localStorage.setItem('user', JSON.stringify(data.user));
                 setTokenCookie(data.token);
-                window.location.href = data.user.role === 'teacher' ? '/teacher/dashboard' : '/student/history';
+                window.location.href = data.user.role === 'organizer' ? '/organizer/dashboard' : '/participant/history';
             } else {
                 errorEl.textContent = data.error || 'Error al iniciar sesión';
             }
@@ -161,7 +161,7 @@ if (registerForm) {
                 body: JSON.stringify({
                     name: document.getElementById('name').value,
                     email: document.getElementById('email').value,
-                    dni: document.getElementById('dni').value,
+                    document_id: document.getElementById('document_id').value,
                     password: document.getElementById('password').value,
                     role: document.getElementById('role').value,
                     group: document.getElementById('group') ? document.getElementById('group').value : null
@@ -174,7 +174,7 @@ if (registerForm) {
                 localStorage.setItem('refresh_token', data.refresh_token);
                 localStorage.setItem('user', JSON.stringify(data.user));
                 setTokenCookie(data.token);
-                window.location.href = data.user.role === 'teacher' ? '/teacher/dashboard' : '/student/history';
+                window.location.href = data.user.role === 'organizer' ? '/organizer/dashboard' : '/participant/history';
             } else {
                 errorEl.textContent = data.error || 'Error al registrarse';
             }
@@ -186,7 +186,7 @@ if (registerForm) {
 
 // Protected route check
 document.addEventListener('DOMContentLoaded', () => {
-    const protectedPaths = ['/teacher/dashboard', '/teacher/session/create', '/teacher/reports', '/teacher/locations', '/student/history'];
+    const protectedPaths = ['/organizer/dashboard', '/organizer/session/create', '/organizer/reports', '/organizer/locations', '/participant/history'];
     const currentPath = window.location.pathname;
 
     if (protectedPaths.includes(currentPath) && !getToken()) {

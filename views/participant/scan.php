@@ -21,7 +21,7 @@
             <p class="session-title"><strong>Sesión:</strong> <?= htmlspecialchars($session['title']) ?></p>
             <p><strong>Expira:</strong> <span id="expiresAt" class="tabular-nums"><?= htmlspecialchars($session['expires_at']) ?></span></p>
             <p><strong>Validación:</strong>
-                <?= $session['location_id'] === null ? 'Solo QR' : 'Dentro de la sede (GPS)' ?>
+                <?= $session['location_id'] === null ? 'Solo QR' : 'Dentro de la ubicación (GPS)' ?>
             </p>
         </div>
 

@@ -27,7 +27,7 @@ class AuthService
             return ['success' => false, 'error' => 'El correo ya está registrado'];
         }
 
-        if (!in_array($data['role'], ['teacher', 'student'])) {
+        if (!in_array($data['role'], ['organizer', 'participant'])) {
             return ['success' => false, 'error' => 'Rol inválido'];
         }
 
@@ -37,7 +37,7 @@ class AuthService
             'password_hash' => password_hash($data['password'], PASSWORD_BCRYPT),
             'role' => $data['role'],
             'group' => $data['group'] ?? null,
-            'dni' => $data['dni'] ?? null,
+            'document_id' => $data['document_id'] ?? null,
         ]);
 
         $token = $this->jwt->encode(['user_id' => $userId, 'role' => $data['role']]);

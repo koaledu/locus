@@ -113,6 +113,6 @@ document.getElementById('createSessionForm').addEventListener('submit', async (e
 
 document.getElementById('closeSessionBtn').addEventListener('click', async () => {
     const data = await closeSession(currentSessionId);
-    if (data) window.location.href = '/teacher/dashboard';
+    if (data) window.location.href = '/organizer/dashboard';
 });
 </script>

@@ -13,9 +13,9 @@ CREATE TABLE users (
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
-    role ENUM('teacher', 'student') NOT NULL,
+    role ENUM('organizer', 'participant') NOT NULL,
     `group` VARCHAR(100),
-    dni VARCHAR(20) UNIQUE,
+    document_id VARCHAR(20) UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -31,7 +31,7 @@ CREATE TABLE locations (
 
 CREATE TABLE sessions (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    teacher_id INT NOT NULL,
+    organizer_id INT NOT NULL,
     location_id INT,
     `group` VARCHAR(100),
     title VARCHAR(200) NOT NULL,
@@ -39,14 +39,14 @@ CREATE TABLE sessions (
     expires_at DATETIME NOT NULL,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (teacher_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (organizer_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (location_id) REFERENCES locations(id) ON DELETE SET NULL
 );
 
 CREATE TABLE attendance (
     id INT AUTO_INCREMENT PRIMARY KEY,
     session_id INT NOT NULL,
-    student_id INT NOT NULL,
+    participant_id INT NOT NULL,
     latitude DECIMAL(10, 7),
     longitude DECIMAL(10, 7),
     validated_by ENUM('gps', 'none') NOT NULL,
@@ -54,8 +54,8 @@ CREATE TABLE attendance (
     user_agent TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (session_id) REFERENCES sessions(id) ON DELETE CASCADE,
-    FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
-    UNIQUE KEY unique_attendance (session_id, student_id)
+    FOREIGN KEY (participant_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_attendance (session_id, participant_id)
 );
 
 CREATE TABLE refresh_tokens (
@@ -67,7 +67,7 @@ CREATE TABLE refresh_tokens (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_sessions_teacher ON sessions(teacher_id);
+CREATE INDEX idx_sessions_organizer ON sessions(organizer_id);
 CREATE INDEX idx_sessions_active ON sessions(is_active, expires_at);
 CREATE INDEX idx_attendance_session ON attendance(session_id);
-CREATE INDEX idx_attendance_student ON attendance(student_id);
+CREATE INDEX idx_attendance_participant ON attendance(participant_id);

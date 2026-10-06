@@ -10,10 +10,10 @@
 
 SET NAMES utf8mb4;
 
-INSERT INTO users (name, email, password_hash, role, `group`, dni) VALUES
-('Yulmaris Corrales', 'y.corrales@locus-demo.test', '$2y$10$usIsxvh5c/ZMYNcB4Bqm4ePk8vbe1.85Xb4i8cZfhLn1vjuOtwoGG', 'teacher', NULL, NULL),
-('Wilmer Sanclemente', 'w.sanclemente@locus-demo.test', '$2y$10$usIsxvh5c/ZMYNcB4Bqm4ePk8vbe1.85Xb4i8cZfhLn1vjuOtwoGG', 'student', NULL, NULL),
-('Karla Peñarreta', 'k.penarreta@locus-demo.test', '$2y$10$usIsxvh5c/ZMYNcB4Bqm4ePk8vbe1.85Xb4i8cZfhLn1vjuOtwoGG', 'student', NULL, NULL);
+INSERT INTO users (name, email, password_hash, role, `group`, document_id) VALUES
+('Yulmaris Corrales', 'y.corrales@locus-demo.test', '$2y$10$usIsxvh5c/ZMYNcB4Bqm4ePk8vbe1.85Xb4i8cZfhLn1vjuOtwoGG', 'organizer', NULL, NULL),
+('Wilmer Sanclemente', 'w.sanclemente@locus-demo.test', '$2y$10$usIsxvh5c/ZMYNcB4Bqm4ePk8vbe1.85Xb4i8cZfhLn1vjuOtwoGG', 'participant', NULL, NULL),
+('Karla Peñarreta', 'k.penarreta@locus-demo.test', '$2y$10$usIsxvh5c/ZMYNcB4Bqm4ePk8vbe1.85Xb4i8cZfhLn1vjuOtwoGG', 'participant', NULL, NULL);
 
 INSERT INTO locations (name, latitude, longitude, radius_meters) VALUES
 ('Ana Frank', 7.0587899, -73.8626501, 50),

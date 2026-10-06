@@ -45,7 +45,7 @@ $router = new Router();
 $router->get('/', function () {
     $user = \App\Services\AuthService::getAuthenticatedUser();
     if ($user) {
-        $route = $user['role'] === 'teacher' ? '/teacher/dashboard' : '/student/history';
+        $route = $user['role'] === 'organizer' ? '/organizer/dashboard' : '/participant/history';
         header('Location: ' . $route);
         exit;
     }
@@ -60,23 +60,23 @@ $router->get('/register', function () {
     (new AuthController())->showRegister();
 });
 
-$router->get('/teacher/dashboard', function () {
+$router->get('/organizer/dashboard', function () {
     (new SessionController())->showDashboard();
 });
 
-$router->get('/teacher/session/create', function () {
+$router->get('/organizer/session/create', function () {
     (new SessionController())->showCreate();
 });
 
-$router->get('/teacher/reports', function () {
+$router->get('/organizer/reports', function () {
     (new ReportController())->showReports();
 });
 
-$router->get('/teacher/locations', function () {
+$router->get('/organizer/locations', function () {
     (new LocationController())->show();
 });
 
-$router->get('/student/history', function () {
+$router->get('/participant/history', function () {
     (new AttendanceController())->showHistory();
 });
 

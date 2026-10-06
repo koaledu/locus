@@ -17,12 +17,12 @@ class LocationController
     public function show(): void
     {
         $user = AuthService::getAuthenticatedUser();
-        if (!$user || $user['role'] !== 'teacher') {
+        if (!$user || $user['role'] !== 'organizer') {
             Router::redirect('/login');
             return;
         }
 
-Router::render('teacher/locations', [
+Router::render('organizer/locations', [
             'title' => 'Ubicaciones',
             'user' => $user,
             'locations' => Database::fetchAll('SELECT * FROM locations ORDER BY name'),
@@ -32,7 +32,7 @@ Router::render('teacher/locations', [
     public function create(): void
     {
         $user = AuthService::getAuthenticatedUser();
-        if (!$user || $user['role'] !== 'teacher') {
+        if (!$user || $user['role'] !== 'organizer') {
             Router::sendJson(403, ['error' => 'Solo organizadores pueden crear ubicaciones']);
             return;
         }
@@ -58,7 +58,7 @@ Router::render('teacher/locations', [
     public function delete(int $id): void
     {
         $user = AuthService::getAuthenticatedUser();
-        if (!$user || $user['role'] !== 'teacher') {
+        if (!$user || $user['role'] !== 'organizer') {
             Router::sendJson(403, ['error' => 'No autorizado']);
             return;
         }

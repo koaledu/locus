@@ -18,13 +18,13 @@ class SessionController
     public function showCreate(): void
     {
         $user = AuthService::getAuthenticatedUser();
-        if (!$user || $user['role'] !== 'teacher') {
+        if (!$user || $user['role'] !== 'organizer') {
             Router::redirect('/login');
             return;
         }
 
         $locations = \App\Helpers\Database::fetchAll('SELECT * FROM locations ORDER BY name');
-        Router::render('teacher/create-session', [
+        Router::render('organizer/create-session', [
             'title' => 'Crear sesión',
             'user' => $user,
             'locations' => $locations,
@@ -34,7 +34,7 @@ class SessionController
     public function create(): void
     {
         $user = AuthService::getAuthenticatedUser();
-        if (!$user || $user['role'] !== 'teacher') {
+        if (!$user || $user['role'] !== 'organizer') {
             Router::sendJson(403, ['error' => 'Solo organizadores pueden crear sesiones']);
             return;
         }
@@ -52,7 +52,7 @@ class SessionController
         }
 
         $sessionId = Session::create([
-            'teacher_id' => $user['id'],
+            'organizer_id' => $user['id'],
             'location_id' => $data['location_id'] ?? null,
             'group' => $user['group'] ?? null,
             'title' => $data['title'] ?? 'Sesión sin título',
@@ -82,8 +82,8 @@ class SessionController
             return;
         }
 
-        if ($user['role'] === 'teacher') {
-            $sessions = Session::teacherSessions($user['id']);
+        if ($user['role'] === 'organizer') {
+            $sessions = Session::organizerSessions($user['id']);
         } else {
             $sessions = Session::activeSessions($user['id']);
         }
@@ -111,7 +111,7 @@ class SessionController
     public function close(int $id): void
     {
         $user = AuthService::getAuthenticatedUser();
-        if (!$user || $user['role'] !== 'teacher') {
+        if (!$user || $user['role'] !== 'organizer') {
             Router::sendJson(403, ['error' => 'No autorizado']);
             return;
         }
@@ -128,6 +128,6 @@ class SessionController
             Router::redirect('/login');
             return;
         }
-        Router::render('teacher/dashboard', ['title' => 'Panel del organizador', 'user' => $user]);
+        Router::render('organizer/dashboard', ['title' => 'Panel del organizador', 'user' => $user]);
     }
 }
