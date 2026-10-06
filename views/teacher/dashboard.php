@@ -60,12 +60,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const qrResult = document.getElementById('qrResult');
     const qrContainer = document.getElementById('qrContainer');
 
-    function showQR(session) {
+    function showQR(session, qrUrl) {
         currentSessionId = session.id;
         document.getElementById('qrTitle').textContent = 'QR: ' + session.title;
         document.getElementById('qrToken').textContent = session.qr_token;
         document.getElementById('qrExpires').textContent = new Date(session.expires_at.replace(' ', 'T') + '-05:00').toLocaleString('es-CO');
-        const qrUrl = window.location.origin + '/api/attendance/scan?token=' + session.qr_token + '&session=' + session.id;
         document.getElementById('qrLink').href = qrUrl;
         document.getElementById('qrLink').textContent = qrUrl;
         qrContainer.innerHTML = '';
@@ -122,7 +121,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
                             });
                             const d = await r.json();
-                            if (r.ok) showQR(d.session);
+                            if (r.ok) showQR(d.session, d.qr_data);
                         } catch (e) {
                             alert('Error al cargar sesión');
                         }

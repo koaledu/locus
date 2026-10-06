@@ -90,7 +90,7 @@ document.getElementById('createSessionForm').addEventListener('submit', async (e
 
         if (res.ok) {
             currentSessionId = data.session.id;
-            const qrUrl = window.location.origin + '/api/attendance/scan?token=' + data.session.token + '&session=' + data.session.id;
+            const qrUrl = data.session.qr_data;
             document.getElementById('qrToken').textContent = data.session.token;
             document.getElementById('qrExpires').textContent = new Date(data.session.expires_at.replace(' ', 'T') + '-05:00').toLocaleString('es-CO');
             document.getElementById('qrLink').href = qrUrl;

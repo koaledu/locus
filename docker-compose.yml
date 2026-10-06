@@ -20,8 +20,10 @@ services:
       - DB_USER=locus
       - DB_PASS=locus_pass
       - JWT_SECRET=super-secret-key-change-in-production-123
-      # Cambia localhost por tu IP local (ej: http://192.168.1.10:8080) si los QR no funcionan en el celular
-      - APP_URL=http://localhost:8080
+      # Debe ser la URL con la que entran los participantes (IP local o túnel).
+      # Es la que se imprime en los códigos QR: si queda en localhost, el
+      # celular no podrá abrirlos. Un valor loopback se ignora y se usa el host real.
+      - APP_URL=${APP_URL:-http://localhost:8080}
     restart: unless-stopped
 
   db:
