@@ -26,21 +26,17 @@ podman compose up -d
 
 La app queda en `http://localhost:8080`.
 
-### Acceder desde otros dispositivos en la misma red
+### Acceder desde el celular
 
-Por defecto, Podman rootless publica puertos solo en `127.0.0.1`, por lo que el servidor no es accesible desde otros dispositivos (ej. celular). Para hacer pruebas en la misma red, ejecuta Podman como root:
-
-```bash
-sudo podman compose up -d
-```
-
-Luego busca la IP local del servidor:
+Podman rootless publica los puertos en todas las interfaces, sin necesidad de `sudo`. Solo hay que entrar por la IP local en vez de `localhost`, porque en el celular `localhost` apunta al propio teléfono:
 
 ```bash
-ip addr show | grep 'inet ' | grep -v 127.0.0.1
+ip route get 1.1.1.1 | grep -oP 'src \K[\d.]+'
 ```
 
-Accede desde el PC usando la IP local (ej. `http://192.168.1.7:8080`) — así los códigos QR contendrán esa IP y podrán escanearse desde el celular en la misma red WiFi.
+Abre esa IP en el celular con el mismo WiFi (ej. `http://192.168.1.17:8080`). Los códigos QR que generes contendrán esa IP y se escanearán desde el teléfono sin problema.
+
+Si el celular no conecta, casi siempre es que está en una red de invitados con aislamiento de clientes activado, que bloquea el tráfico entre dispositivos.
 
 ### Usuarios de prueba (contraseña: `123456`)
 
