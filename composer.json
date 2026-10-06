@@ -13,11 +13,6 @@
             "App\\": "src/"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "App\\": "src/"
-        }
-    },
     "scripts": {
         "test": "phpunit --configuration tests/phpunit.xml",
         "serve": "php -S localhost:8000 -t public public/index.php"

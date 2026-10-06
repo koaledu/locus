@@ -30,10 +30,4 @@ class QRService
         $baseUrl = self::detectBaseUrl();
         return "$baseUrl/api/attendance/scan?token=$token&session=$sessionId";
     }
-
-    public static function generatePNG(string $data): string
-    {
-        $encoded = urlencode($data);
-        return "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=$encoded";
-    }
 }

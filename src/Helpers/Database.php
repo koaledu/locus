@@ -32,26 +32,9 @@ class Database
             ]);
             self::$instance->exec('SET NAMES utf8mb4');
             self::$instance->exec("SET time_zone = '-05:00'");
-            self::runMigrations();
         }
 
         return self::$instance;
-    }
-
-    private static function runMigrations(): void
-    {
-        $migrations = [
-            "ALTER TABLE users ADD COLUMN `group` VARCHAR(100) AFTER `role`",
-            "ALTER TABLE sessions ADD COLUMN `group` VARCHAR(100) AFTER `classroom_id`",
-        ];
-
-        foreach ($migrations as $sql) {
-            try {
-                self::$instance->exec($sql);
-            } catch (\PDOException $e) {
-                // Column already exists — ignore
-            }
-        }
     }
 
     public static function query(string $sql, array $params = []): \PDOStatement
