@@ -52,7 +52,7 @@ Accede desde el PC usando la IP local (ej. `http://192.168.1.7:8080`) — así l
 
 ## Ubicaciones de registro
 
-Las coordenadas quedan mal en los datos de ejemplo (caen fuera de Bogotá). Créalas desde la app: **Panel → Ubicaciones → clic en el mapa**.
+Estas ubicaciones son reales, pero están a unos 260 km de Bogotá: el mapa se abrirá ahí, no en la capital. Para probar con otros puntos, créalos desde la app en **Panel → Ubicaciones → clic en el mapa**.
 
 | Ubicación | Coordenadas | WiFi |
 |-----------|-------------|------|
