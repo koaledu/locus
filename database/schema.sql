@@ -26,8 +26,6 @@ CREATE TABLE locations (
     latitude DECIMAL(10, 7) NOT NULL,
     longitude DECIMAL(10, 7) NOT NULL,
     radius_meters INT NOT NULL DEFAULT 50,
-    ssid VARCHAR(100),
-    ip_range VARCHAR(45),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -51,20 +49,13 @@ CREATE TABLE attendance (
     student_id INT NOT NULL,
     latitude DECIMAL(10, 7),
     longitude DECIMAL(10, 7),
-    validated_by ENUM('gps', 'network', 'both', 'none') NOT NULL,
+    validated_by ENUM('gps', 'none') NOT NULL,
     ip_address VARCHAR(45),
     user_agent TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (session_id) REFERENCES sessions(id) ON DELETE CASCADE,
     FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
     UNIQUE KEY unique_attendance (session_id, student_id)
-);
-
-CREATE TABLE geofence_config (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    location_id INT NOT NULL,
-    validation_mode ENUM('gps_only', 'network_only', 'gps_or_network', 'gps_and_network') NOT NULL DEFAULT 'gps_or_network',
-    FOREIGN KEY (location_id) REFERENCES locations(id) ON DELETE CASCADE
 );
 
 CREATE TABLE refresh_tokens (

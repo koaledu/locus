@@ -40,12 +40,9 @@ class AttendanceController
             return;
         }
 
-        $validationMode = $session['location_id'] === null ? 'none' : ($session['validation_mode'] ?? 'gps_or_network');
-
         Router::render('student/scan', [
             'title' => 'Registrar asistencia',
             'session' => $session,
-            'validation_mode' => $validationMode,
         ]);
     }
 
@@ -78,78 +75,26 @@ class AttendanceController
             return;
         }
 
-        $mode = $session['validation_mode'] ?? 'gps_or_network';
-        $validatedBy = null;
-        $gpsValid = false;
-        $networkValid = false;
-
-        if ($session['location_id'] === null) {
-            $validatedBy = 'none';
-        }
-
         $studentLat = $data['latitude'] ?? null;
         $studentLng = $data['longitude'] ?? null;
+        $validatedBy = 'none';
 
-        if ($validatedBy === null && in_array($mode, ['gps_only', 'gps_or_network', 'gps_and_network'])) {
-            if ($studentLat !== null && $studentLng !== null && $session['latitude'] && $session['longitude']) {
-                $gpsValid = LocationValidator::validateGPS(
+        // A session without a location is QR-only: nothing to check.
+        if ($session['location_id'] !== null) {
+            $gpsValid = $studentLat !== null && $studentLng !== null
+                && LocationValidator::validateGPS(
                     (float)$studentLat,
                     (float)$studentLng,
                     (float)$session['latitude'],
                     (float)$session['longitude'],
                     (int)$session['radius_meters']
                 );
+
+            if (!$gpsValid) {
+                Router::sendJson(403, ['error' => 'Debes estar dentro de la ubicación']);
+                return;
             }
-        }
-
-        if ($validatedBy === null && in_array($mode, ['network_only', 'gps_or_network', 'gps_and_network'])) {
-            $clientIp = self::clientIp();
-            if ($session['ip_range']) {
-                $ranges = array_map('trim', explode(',', $session['ip_range']));
-                $networkValid = LocationValidator::validateNetwork($clientIp, $ranges);
-            }
-
-            if (!empty($data['ssid']) && !empty($session['ssid'])) {
-                $ssidValid = LocationValidator::validateSSID($data['ssid'], $session['ssid']);
-                $networkValid = $networkValid || $ssidValid;
-            }
-        }
-
-        if ($validatedBy === null) {
-            switch ($mode) {
-                case 'gps_only':
-                    if (!$gpsValid) {
-                        Router::sendJson(403, ['error' => 'Debes estar dentro de la ubicación (GPS)']);
-                        return;
-                    }
-                    $validatedBy = 'gps';
-                    break;
-
-                case 'network_only':
-                    if (!$networkValid) {
-                        Router::sendJson(403, ['error' => 'Debes estar conectado a la red universitaria']);
-                        return;
-                    }
-                    $validatedBy = 'network';
-                    break;
-
-                case 'gps_and_network':
-                    if (!$gpsValid || !$networkValid) {
-                        Router::sendJson(403, ['error' => 'Debes estar en la ubicación Y conectado a la red autorizada']);
-                        return;
-                    }
-                    $validatedBy = 'both';
-                    break;
-
-                case 'gps_or_network':
-                default:
-                    if (!$gpsValid && !$networkValid) {
-                        Router::sendJson(403, ['error' => 'Debes estar en la ubicación o conectado a la red autorizada']);
-                        return;
-                    }
-                    $validatedBy = $gpsValid && $networkValid ? 'both' : ($gpsValid ? 'gps' : 'network');
-                    break;
-            }
+            $validatedBy = 'gps';
         }
 
         Attendance::create([

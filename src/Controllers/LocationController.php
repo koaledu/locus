@@ -8,11 +8,9 @@
 
 namespace App\Controllers;
 
-use App\Controllers\AttendanceController;
 use App\Helpers\Database;
 use App\Helpers\Router;
 use App\Services\AuthService;
-use App\Services\LocationValidator;
 
 class LocationController
 {
@@ -24,16 +22,10 @@ class LocationController
             return;
         }
 
-        // A suggestion only: which subnet this is depends on where the
-        // organizer is standing, and behind a tunnel it is their public IP.
-        $clientIp = AttendanceController::clientIp();
-
-        Router::render('teacher/locations', [
+Router::render('teacher/locations', [
             'title' => 'Ubicaciones',
             'user' => $user,
             'locations' => Database::fetchAll('SELECT * FROM locations ORDER BY name'),
-            'detectedSubnet' => $clientIp !== '' ? LocationValidator::subnetOf($clientIp) : null,
-            'detectedIpIsPrivate' => LocationValidator::isPrivateIp($clientIp),
         ]);
     }
 
@@ -58,8 +50,6 @@ class LocationController
             'latitude' => (float)$data['latitude'],
             'longitude' => (float)$data['longitude'],
             'radius_meters' => (int)($data['radius_meters'] ?? 50),
-            'ssid' => trim($data['ssid'] ?? '') ?: null,
-            'ip_range' => trim($data['ip_range'] ?? '') ?: null,
         ]);
 
         Router::sendJson(201, ['id' => $id]);

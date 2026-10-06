@@ -21,16 +21,7 @@
             <p class="session-title"><strong>Sesión:</strong> <?= htmlspecialchars($session['title']) ?></p>
             <p><strong>Expira:</strong> <span id="expiresAt" class="tabular-nums"><?= htmlspecialchars($session['expires_at']) ?></span></p>
             <p><strong>Validación:</strong>
-                <?php
-                $modeLabels = [
-                    'gps_only' => 'Solo GPS',
-                    'network_only' => 'Solo red',
-                    'gps_or_network' => 'GPS o Red',
-                    'gps_and_network' => 'GPS y Red',
-                    'none' => 'Sin validación',
-                ];
-                echo $modeLabels[$validation_mode] ?? 'GPS o Red';
-                ?>
+                <?= $session['location_id'] === null ? 'Solo QR' : 'Dentro de la sede (GPS)' ?>
             </p>
         </div>
 
@@ -93,8 +84,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 session_id: <?= $session['id'] ?>,
                 token: '<?= htmlspecialchars($session['qr_token']) ?>',
                 latitude: latitude,
-                longitude: longitude,
-                ssid: ''  // Could be populated via additional JS
+                longitude: longitude
             })
         });
 
@@ -108,7 +98,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             scanResult.innerHTML = `
                 <h2>✅ Asistencia registrada</h2>
                 <p>${data.message}</p>
-                <p><strong>Validado por:</strong> ${data.validated_by === 'gps' ? 'GPS' : data.validated_by === 'network' ? 'Red' : data.validated_by === 'none' ? 'Sin validación' : 'GPS + Red'}</p>
+                <p><strong>Validado por:</strong> ${data.validated_by === 'gps' ? 'GPS' : 'Solo QR'}</p>
             `;
         } else {
             scanResult.style.display = 'block';

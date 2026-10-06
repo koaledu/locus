@@ -43,72 +43,9 @@ class LocationValidatorTest extends TestCase
         $this->assertTrue($valid);
     }
 
-    public function testNetworkIPInRange(): void
-    {
-        $valid = LocationValidator::validateNetwork(
-            '192.168.1.50',
-            ['192.168.1.0/24']
-        );
-        $this->assertTrue($valid);
-    }
-
-    public function testNetworkIPOutsideRange(): void
-    {
-        $valid = LocationValidator::validateNetwork(
-            '10.0.0.1',
-            ['192.168.1.0/24']
-        );
-        $this->assertFalse($valid);
-    }
-
-    public function testMultipleRanges(): void
-    {
-        $valid = LocationValidator::validateNetwork(
-            '10.0.0.5',
-            ['192.168.1.0/24', '10.0.0.0/8']
-        );
-        $this->assertTrue($valid);
-    }
-
-    public function testExactIPMatch(): void
-    {
-        $valid = LocationValidator::validateNetwork(
-            '200.100.50.25',
-            ['200.100.50.25']
-        );
-        $this->assertTrue($valid);
-    }
-
-    public function testEmptyRangesReturnsFalse(): void
-    {
-        $valid = LocationValidator::validateNetwork('192.168.1.1', []);
-        $this->assertFalse($valid);
-    }
-
-    public function testSSIDMatch(): void
-    {
-        $this->assertTrue(
-            LocationValidator::validateSSID('UDI-WiFi', 'UDI-WiFi')
-        );
-    }
-
-    public function testSSIDCaseInsensitiveMatch(): void
-    {
-        $this->assertTrue(
-            LocationValidator::validateSSID('udi-wifi', 'UDI-WiFi')
-        );
-    }
-
-    public function testSSIDMismatch(): void
-    {
-        $this->assertFalse(
-            LocationValidator::validateSSID('Public-WiFi', 'UDI-WiFi')
-        );
-    }
-
     public function testHaversineAccuracy(): void
     {
-        // Bogotá to Medellín ~240km, well outside any geocerca
+        // ~240 km apart, well outside any radius
         $valid = LocationValidator::validateGPS(
             4.7110, -74.0721,
             6.2476, -75.5658,

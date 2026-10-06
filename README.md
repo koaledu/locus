@@ -11,7 +11,7 @@ SPDX-License-Identifier: Apache-2.0
 
 # Locus
 
-Sistema de control de asistencias con códigos QR y verificación de ubicación (GPS/Red). Pensado para eventos de cualquier tipo: un organizador crea una sesión, los participantes escanean el QR y se registra su asistencia, con o sin geocerca. Desarrollado en PHP 8.1 sin framework.
+Sistema de control de asistencias con códigos QR y verificación de ubicación por GPS. Pensado para eventos de cualquier tipo: un organizador crea una sesión, los participantes escanean el QR y se registra su asistencia, con o sin geocerca. Desarrollado en PHP 8.1 sin framework.
 
 ## Requisitos
 
@@ -50,10 +50,12 @@ Si el celular no conecta, casi siempre es que está en una red de invitados con 
 
 Estas ubicaciones son reales, pero están a unos 260 km de Bogotá: el mapa se abrirá ahí, no en la capital. Para probar con otros puntos, créalos desde la app en **Panel → Ubicaciones → clic en el mapa**.
 
-| Ubicación | Coordenadas | WiFi |
-|-----------|-------------|------|
-| Ana Frank | 7.0587899, -73.8626501 | WBAF-estudiantes |
-| Marie Curie | 7.0623784, -73.8580640 | WBcaMC-estudiantes |
+Una sesión creada con ubicación exige GPS dentro del radio. Sin ubicación, es solo QR y no valida posición.
+
+| Ubicación | Coordenadas | Radio |
+|-----------|-------------|-------|
+| Ana Frank | 7.0587899, -73.8626501 | 50 m |
+| Marie Curie | 7.0623784, -73.8580640 | 50 m |
 
 ## Comandos útiles
 

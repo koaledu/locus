@@ -46,26 +46,6 @@ $centerLng = $center ? (float)$center['longitude'] : -74.0;
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="ssid">WiFi (SSID)</label>
-            <input type="text" id="ssid" name="ssid" placeholder="Ej: Red-Evento">
-        </div>
-
-        <div class="form-group">
-            <label for="ip_range">Rango de IP (ej: 192.168.10.0/24)</label>
-            <input type="text" id="ip_range" name="ip_range" placeholder="Ej: 192.168.10.0/24">
-            <?php if (!empty($detectedSubnet)): ?>
-                <button type="button" class="btn btn-secondary btn-sm" id="useDetectedSubnet"
-                        data-subnet="<?= htmlspecialchars($detectedSubnet) ?>">
-                    Usar mi red actual (<?= htmlspecialchars($detectedSubnet) ?>)
-                </button>
-                <small class="hint">
-                    <?= $detectedIpIsPrivate
-                        ? 'Tu red local.'
-                        : 'Ojo: esta es tu IP pública, no la red del evento. Solo úsala si sabes que el evento comparte ese rango.' ?>
-                </small>
-            <?php endif; ?>
-        </div>
 
         <button type="submit" class="btn btn-primary">Guardar ubicación</button>
         <span id="locationError" class="error-msg"></span>
@@ -81,8 +61,6 @@ $centerLng = $center ? (float)$center['longitude'] : -74.0;
                     <th>Nombre</th>
                     <th>Coordenadas</th>
                     <th>Radio</th>
-                    <th>WiFi</th>
-                    <th>IP</th>
                     <th></th>
                 </tr>
             </thead>
@@ -92,8 +70,8 @@ $centerLng = $center ? (float)$center['longitude'] : -74.0;
                     <td><?= htmlspecialchars($c['name']) ?></td>
                     <td class="tabular-nums"><?= htmlspecialchars($c['latitude'] . ', ' . $c['longitude']) ?></td>
                     <td><?= (int)$c['radius_meters'] ?> m</td>
-                    <td><?= htmlspecialchars($c['ssid'] ?? '—') ?></td>
-                    <td><?= htmlspecialchars($c['ip_range'] ?? '—') ?></td>
+
+
                     <td><button type="button" class="btn btn-danger btn-sm delete-location" data-id="<?= (int)$c['id'] ?>">Eliminar</button></td>
                 </tr>
             <?php endforeach; ?>
@@ -129,12 +107,6 @@ function placePin(lat, lng) {
 
 map.on('click', e => placePin(e.latlng.lat, e.latlng.lng));
 
-const useSubnetBtn = document.getElementById('useDetectedSubnet');
-if (useSubnetBtn) {
-    useSubnetBtn.addEventListener('click', () => {
-        document.getElementById('ip_range').value = useSubnetBtn.dataset.subnet;
-    });
-}
 
 document.getElementById('radius_meters').addEventListener('input', () => {
     const meters = parseInt(document.getElementById('radius_meters').value);
@@ -154,14 +126,11 @@ document.getElementById('locationForm').addEventListener('submit', async e => {
         name: document.getElementById('name').value,
         latitude: document.getElementById('latitude').value,
         longitude: document.getElementById('longitude').value,
-        radius_meters: document.getElementById('radius_meters').value,
-        ssid: document.getElementById('ssid').value,
-        ip_range: document.getElementById('ip_range').value
+        radius_meters: document.getElementById('radius_meters').value
     };
 
     try {
         const res = await fetch('/api/locations', { method: 'POST', headers: authHeaders, body: JSON.stringify(body) });
-        const data = await res.json();
         if (!res.ok) {
             errorEl.textContent = data.error || 'Error al guardar la ubicación';
             return;

@@ -18,11 +18,9 @@ class Session extends Model
     public static function findWithLocation(int $id): ?array
     {
         return self::fetchOne(
-            'SELECT s.*, c.name as location_name, c.latitude, c.longitude, c.radius_meters, c.ssid, c.ip_range,
-                    gc.validation_mode
+            'SELECT s.*, c.name as location_name, c.latitude, c.longitude, c.radius_meters
              FROM sessions s
              LEFT JOIN locations c ON s.location_id = c.id
-             LEFT JOIN geofence_config gc ON c.id = gc.location_id
              WHERE s.id = ?',
             [$id]
         );
@@ -31,11 +29,9 @@ class Session extends Model
     public static function findValidWithLocation(int $id, string $token): ?array
     {
         return self::fetchOne(
-            'SELECT s.*, c.latitude, c.longitude, c.radius_meters, c.ssid, c.ip_range,
-                    gc.validation_mode
+            'SELECT s.*, c.latitude, c.longitude, c.radius_meters
              FROM sessions s
              LEFT JOIN locations c ON s.location_id = c.id
-             LEFT JOIN geofence_config gc ON c.id = gc.location_id
              WHERE s.id = ? AND s.qr_token = ? AND s.is_active = 1 AND s.expires_at > NOW()',
             [$id, $token]
         );

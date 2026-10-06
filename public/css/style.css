@@ -493,15 +493,12 @@ h2 {
     color: #1e66f5;
 }
 
-.badge-network {
-    background: #f5d4ed;
-    color: #ea76cb;
+.badge-none {
+    background: #e6e9ef;
+    color: #6c6f85;
 }
 
-.badge-both {
-    background: #d9f5d0;
-    color: #40a02b;
-}
+
 
 /* History */
 .history-item {
