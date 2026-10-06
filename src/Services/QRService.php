@@ -18,7 +18,10 @@ class QRService
     public static function detectBaseUrl(): string
     {
         if (!empty($_SERVER['HTTP_HOST'])) {
-            $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+            // A Cloudflare Tunnel terminates TLS and forwards plain HTTP to
+            // Apache, so HTTPS is unset; the tunnel reports the real scheme.
+            $proto = strtolower((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? $_SERVER['HTTPS'] ?? ''));
+            $scheme = in_array($proto, ['https', 'on', '1'], true) ? 'https' : 'http';
             return "$scheme://{$_SERVER['HTTP_HOST']}";
         }
         $config = require __DIR__ . '/../../config/app.php';

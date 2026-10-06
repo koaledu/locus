@@ -15,6 +15,14 @@ use App\Services\LocationValidator;
 
 class AttendanceController
 {
+    // Behind a Cloudflare Tunnel REMOTE_ADDR is the edge IP, so prefer the
+    // real client IP Cloudflare sets. Only safe because the tunnel is the
+    // sole ingress; X-Forwarded-For is client-spoofable and is ignored.
+    public static function clientIp(): string
+    {
+        return $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
+    }
+
     public function scan(): void
     {
         $token = $_GET['token'] ?? '';
@@ -95,7 +103,7 @@ class AttendanceController
         }
 
         if ($validatedBy === null && in_array($mode, ['network_only', 'gps_or_network', 'gps_and_network'])) {
-            $clientIp = $_SERVER['REMOTE_ADDR'] ?? '';
+            $clientIp = self::clientIp();
             if ($session['ip_range']) {
                 $ranges = array_map('trim', explode(',', $session['ip_range']));
                 $networkValid = LocationValidator::validateNetwork($clientIp, $ranges);
@@ -150,7 +158,7 @@ class AttendanceController
             'latitude' => $studentLat,
             'longitude' => $studentLng,
             'validated_by' => $validatedBy,
-            'ip_address' => $_SERVER['REMOTE_ADDR'] ?? null,
+            'ip_address' => self::clientIp(),
             'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? null,
         ]);
 
