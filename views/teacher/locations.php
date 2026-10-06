@@ -54,6 +54,17 @@ $centerLng = $center ? (float)$center['longitude'] : -74.0;
         <div class="form-group">
             <label for="ip_range">Rango de IP (ej: 192.168.10.0/24)</label>
             <input type="text" id="ip_range" name="ip_range" placeholder="Ej: 192.168.10.0/24">
+            <?php if (!empty($detectedSubnet)): ?>
+                <button type="button" class="btn btn-secondary btn-sm" id="useDetectedSubnet"
+                        data-subnet="<?= htmlspecialchars($detectedSubnet) ?>">
+                    Usar mi red actual (<?= htmlspecialchars($detectedSubnet) ?>)
+                </button>
+                <small class="hint">
+                    <?= $detectedIpIsPrivate
+                        ? 'Tu red local.'
+                        : 'Ojo: esta es tu IP pública, no la red del evento. Solo úsala si sabes que el evento comparte ese rango.' ?>
+                </small>
+            <?php endif; ?>
         </div>
 
         <button type="submit" class="btn btn-primary">Guardar ubicación</button>
@@ -117,6 +128,13 @@ function placePin(lat, lng) {
 }
 
 map.on('click', e => placePin(e.latlng.lat, e.latlng.lng));
+
+const useSubnetBtn = document.getElementById('useDetectedSubnet');
+if (useSubnetBtn) {
+    useSubnetBtn.addEventListener('click', () => {
+        document.getElementById('ip_range').value = useSubnetBtn.dataset.subnet;
+    });
+}
 
 document.getElementById('radius_meters').addEventListener('input', () => {
     const meters = parseInt(document.getElementById('radius_meters').value);
